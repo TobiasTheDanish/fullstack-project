@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { CallbackError, Document } from 'mongoose';
 import { IShirt } from './shirt';
 import { Schema } from 'mongoose';
 import { IBuyer } from './buyer';
@@ -7,7 +7,7 @@ export interface IOrder extends Document {
     _id: Schema.Types.ObjectId,
     buyer?: IBuyer,
     shirts: IShirt[],
-    total: number
+    totalPrice: number
     createdAt?: Date,
 }
 
@@ -21,8 +21,25 @@ const schema = new mongoose.Schema<IOrder>({
     }
 });
 
+schema.pre('find', function() {
+    this.populate('shirts');
+});
+
+schema.post('save', function(doc, next) {
+    doc.populate('shirts').then(function() {
+        next();
+    });
+});
+
 schema.virtual('totalPrice').get(function(): number {
-    return this.shirts.reduce((acc, curr) => acc + curr.price, 0);
+    try {
+        return this.shirts.reduce((acc, curr) => {
+            return acc + curr.price;
+        }, 0);
+    } catch (e) {
+        console.error("Error in 'order' virtual 'totalPrice'", e);
+        return 0;
+    }
 });
 
 schema.pre('save', function(next) {
@@ -31,6 +48,26 @@ schema.pre('save', function(next) {
     }
 
     next();
+})
+
+schema.post('save', async function(_doc, next) {
+    try {
+        const orderId = this._id;
+        const buyerId = this.buyer;
+
+        if (buyerId && orderId) {
+            const buyer = await mongoose.model('Buyer').findById(buyerId);
+
+            if (buyer) {
+                buyer.orders.push(orderId);
+                await buyer.save();
+            }
+        }
+
+        next();
+    } catch (error) {
+        next(error as CallbackError);
+    }
 })
 
 export const Order = mongoose.model('Order', schema);

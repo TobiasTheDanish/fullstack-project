@@ -29,6 +29,10 @@ const schema = new mongoose.Schema<IShirt>({
     number: {
         type: Number,
     },
+    price: {
+        type: Number,
+        required: true,
+    },
     createdAt: {
         type: Date,
         immutable: true,
