@@ -1,11 +1,11 @@
 import mongoose, { CallbackError, Document } from 'mongoose';
 import { IShirt } from './shirt';
 import { Schema } from 'mongoose';
-import { IBuyer } from './buyer';
+import { IUser } from './user';
 
 export interface IOrder extends Document {
     _id: Schema.Types.ObjectId,
-    buyer?: IBuyer,
+    user?: IUser,
     shirts: IShirt[],
     totalPrice: number
     createdAt?: Date,
@@ -13,7 +13,7 @@ export interface IOrder extends Document {
 
 const schema = new mongoose.Schema<IOrder>({
     _id: Schema.Types.ObjectId,
-    buyer: {type: Schema.Types.ObjectId, ref: 'Buyer', required: true},
+    user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     shirts: [{type: Schema.Types.ObjectId, ref: 'Shirt'}],
     createdAt: {
         type: Date,
@@ -53,14 +53,14 @@ schema.pre('save', function(next) {
 schema.post('save', async function(_doc, next) {
     try {
         const orderId = this._id;
-        const buyerId = this.buyer;
+        const userId = this.user;
 
-        if (buyerId && orderId) {
-            const buyer = await mongoose.model('Buyer').findById(buyerId);
+        if (userId && orderId) {
+            const user = await mongoose.model('User').findById(userId);
 
-            if (buyer) {
-                buyer.orders.push(orderId);
-                await buyer.save();
+            if (user) {
+                user.orders.push(orderId);
+                await user.save();
             }
         }
 

@@ -1,12 +1,12 @@
 import mongoose, { CallbackError, Document, Schema } from "mongoose";
-import { ISeller } from "./seller";
+import { IUser } from "./user";
 import { IClub } from "./club";
 
 export interface IShirt extends Document {
     _id: string,
     name: string,
     club?: IClub,
-    seller?: ISeller,
+    user?: IUser,
     playerName: string,
     number: number,
     price: number,
@@ -21,7 +21,7 @@ const schema = new mongoose.Schema<IShirt>({
         trim: true,
     },
     club: {type: Schema.Types.ObjectId, ref: "Club", required: true},
-    seller: {type: Schema.Types.ObjectId, ref: "Seller", required: true},
+    user: {type: Schema.Types.ObjectId, ref: "user", required: true},
     playerName: {
         type: String,
         trim: true,

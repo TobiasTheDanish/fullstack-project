@@ -1,15 +1,17 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
+import { IShirt } from "./shirt";
 import { IOrder } from "./order";
 
-export interface IBuyer extends Document {
+export interface ISeller extends Document {
     _id: string,
     username: string,
     email: string,
+    shirts: IShirt[],
     orders: IOrder[],
     createdAt?: Date,
 }
 
-const schema = new mongoose.Schema<IBuyer>({
+const schema = new mongoose.Schema<ISeller>({
     _id: Schema.Types.ObjectId,
     username: {
         type: String,
@@ -25,6 +27,7 @@ const schema = new mongoose.Schema<IBuyer>({
         },
         message: (props: {value: string}) => `${props.value} is not a valid email address.`,
     },
+    shirts: [{type: Schema.Types.ObjectId, ref: "Shirt"}],
     orders: [{type: Schema.Types.ObjectId, ref: "Order"}],
     createdAt: {
         type: Date,
@@ -40,4 +43,4 @@ schema.pre('save', function(next) {
     next();
 })
 
-export const Buyer = mongoose.model("Buyer", schema);
+export const User = mongoose.model('User', schema);
