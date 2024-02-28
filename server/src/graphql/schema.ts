@@ -95,13 +95,13 @@ export const resolvers = {
 		},
 		shirtsByLeague: async (_, {leagueId}: {leagueId: string}) => {
 			const league = await League
-			.findOne({_id: new ObjectId(leagueId)})
-			.populate({
+				.findOne({_id: new ObjectId(leagueId)})
+				.populate({
 					path: 'clubs',
 					populate: {
 						path: 'shirts'
 					}
-			});
+				});
 
 			if (!league) {
 				return [];
