@@ -1,11 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { IShirt } from './shirt';
+import { ILeague } from './league';
 
 export interface IClub extends Document {
     _id: string,
     name: string,
-    league: string,
-    country: string,
+    league: ILeague,
     shirts: IShirt[],
     createdAt?: Date,
 }
@@ -19,18 +19,7 @@ const schema = new mongoose.Schema<IClub>({
         trim: true,
         unique: true,
     },
-    league: {
-        type: String,
-        required: [true, "A Club must have a league associated"],
-        minlength: [1, "Club league cannot be empty."],
-        trim: true,
-    },
-    country: {
-        type: String,
-        required: [true, "A club must have a country"],
-        minlength: [1, "Club country cannot be empty."],
-        trim: true,
-    },
+    league: {type: Schema.Types.ObjectId, ref: 'League'},
     shirts: [
         {type: Schema.Types.ObjectId, ref: 'Shirt'}
     ],
@@ -38,6 +27,17 @@ const schema = new mongoose.Schema<IClub>({
         type: Date,
         immutable: true,
     },
+});
+
+// populate on find
+schema.pre('find', function() {
+    this.populate('league');
+});
+
+schema.post('save', function(doc, next) {
+    doc.populate('league').then(function() {
+        next();
+    });
 });
 
 schema.pre('save', function(next) {
