@@ -40,12 +40,7 @@ const schema = new mongoose.Schema<IBid>({
     }
 });
 
-schema.pre('find', function() {
-    this.populate('owner');
-    this.populate('shirt');
-});
-
-schema.post('save', async function(doc, next) {
+schema.post('save', async function(_doc, next) {
     try {
         const bidId = this._id;
         const ownerId = this.owner;
@@ -58,9 +53,6 @@ schema.post('save', async function(doc, next) {
                 await owner.save();
             }
         }
-
-        await doc.populate('owner');
-        await doc.populate('shirt');
 
         next();
     } catch (error) {

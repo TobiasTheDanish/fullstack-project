@@ -34,14 +34,11 @@ schema.virtual('shirts', {
 // populate on find
 schema.pre('find', function() {
     this.populate('league');
-    this.populate('shirts');
 });
 
 schema.post('save', function(doc, next) {
     doc.populate('league').then(function() {
-        this.populate('shirts').then(function() {
-            next();
-        });
+        next();
     });
 });
 

@@ -1,9 +1,10 @@
 import { League } from "../model/league";
 import { Club } from "../model/club";
-import { Shirt } from "../model/shirt"
+import { IShirt, Shirt } from "../model/shirt"
 import { User } from "../model/user";
 import { Bid } from "../model/bid";
 import { ObjectId } from "mongodb";
+import { populate } from "dotenv";
 
 export const typeDefs = `#graphql
 	type League {
@@ -86,13 +87,48 @@ export const resolvers = {
 			return Club.find({"league._id": leagueId});
 		},
 		allShirts: async () => {
-			return Shirt.find().then((data) => data);
+			return Shirt.find()
+				.populate('club')
+				.populate('seller')
+				.populate('bids')
+				.then((data) => data);
 		},
-		shirtsByLeague: async (_, {leagueId}) => {
-			return Shirt.find({"league._id": leagueId});
+		shirtsByLeague: async (_, {leagueId}: {leagueId: string}) => {
+			const league = await League
+			.findOne({_id: new ObjectId(leagueId)})
+			.populate({
+					path: 'clubs',
+					populate: {
+						path: 'shirts'
+					}
+			});
+
+			if (!league) {
+				return [];
+			}
+			const clubs = league.clubs
+
+			const shirts: IShirt[] = [];
+
+			clubs.forEach(club => {
+				club.shirts.forEach(shirt => {
+					shirts.push(shirt);
+				});
+			});
+
+			return shirts;
 		},
 		shirtsByClub: async (_, {clubId}: {clubId: string}) => {
-			return await Club.findOne({_id: new ObjectId(clubId)}).populate("shirts").clone();
+			const club = await Club.findOne({_id: new ObjectId(clubId)});
+			if (!club) {
+				return [];
+			}
+
+			if (!club?.populated('shirts')) {
+				await club?.populate('shirts');
+			}
+
+			return club.shirts;
 		},
 		shirtById: async (_, {shirtId}) => {
 			return Shirt.findById(shirtId);

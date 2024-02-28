@@ -79,22 +79,14 @@ schema.virtual('activeBids', {
 });
 
 schema.pre('save', function(next) {
-    if (!this.createdAt) {
+    if (this.isNew && !this.createdAt) {
         this.createdAt = new Date();
     }
 
     next();
 })
 
-schema.pre('find', async function (next) {
-    await this.populate('seller');
-    await this.populate('club');
-    await this.populate('bids');
-
-    next();
-});
-
-schema.post('save', async function(doc, next) {
+schema.post('save', async function(_doc, next) {
     try {
         const sellerId = this.seller;
         const shirtId = this._id;
@@ -113,10 +105,6 @@ schema.post('save', async function(doc, next) {
                 await club.save();
             }
         }
-
-        await doc.populate('seller');
-        await doc.populate('club');
-        await doc.populate('bids');
 
         next();
     } catch (error) {
