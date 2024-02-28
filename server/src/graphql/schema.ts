@@ -1,10 +1,7 @@
 import { League } from "../model/league";
 import { Club } from "../model/club";
 import { IShirt, Shirt } from "../model/shirt"
-import { User } from "../model/user";
-import { Bid } from "../model/bid";
 import { ObjectId } from "mongodb";
-import { populate } from "dotenv";
 
 User.toString()
 Bid.toString()
@@ -27,19 +24,19 @@ export const typeDefs = `#graphql
 
 	type Shirt {
 		_id: ID!,
-    	title: String!,
-    	description: String!,
-    	condition: String!,
-    	year: String!,
-    	club: Club!,
-    	seller: User!,
-    	playerName: String!,
-    	playerNumber: Int!,
-    	bids: Bid,
-    	activeBids: Bid,
-    	price: Int,
-    	minPrice: Int!,
-    	createdAt: String,
+		title: String!,
+		description: String!,
+		condition: String!,
+		year: String!,
+		club: Club!,
+		seller: User!,
+		playerName: String,
+		playerNumber: Int,
+		bids: [Bid],
+		activeBids: [Bid],
+		price: Int!,
+		minPrice: Int!,
+		createdAt: String,
 	}
 
 	type User {
@@ -72,6 +69,17 @@ export const typeDefs = `#graphql
 		shirtsByClub(clubId: ID): [Shirt],
 		shirtById(shirtId: ID): Shirt,
 		shirtsByUserId(userId: ID): [Shirt],
+	}
+
+	type Mutations {
+		createShirt(title: String!, description: String!, condition: String!, year: String!, club: Club!, seller: User!, playerName: String, playerNumber: Int, price: Int!, minPrice: Int!): Shirt,
+		updateShirt(updateShirt: Shirt!): Shirt,
+		deleteShirtById(id: ID!): Shirt,
+		acceptBid(bidId: ID!, userId: ID!): Bid,
+		declineBid(bidId: ID!, userId: ID!): Bid,
+		createBid(ownerId: ID!, shirtId: Id!, amount: Int, expiryDate: String): Bid,
+		updateBid(updatedBid: Bid!): Bid,
+		deleteBidById(bidId: ID!): Bid,
 	}
 `;
 
