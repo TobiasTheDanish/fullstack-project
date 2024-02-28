@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import { IClub } from "./club";
 
 export interface ILeague extends Document {
     _id: string,
     name: string,
     country: string,
+    clubs: IClub[],
     createdAt?: Date,
 }
 
