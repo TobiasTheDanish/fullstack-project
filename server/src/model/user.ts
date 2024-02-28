@@ -1,22 +1,22 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { IShirt } from "./shirt";
-import { IOrder } from "./order";
+import { IBid } from "./bid";
 
-export interface ISeller extends Document {
+export interface IUser extends Document {
     _id: string,
     username: string,
     email: string,
+    password: string,
     shirts: IShirt[],
-    orders: IOrder[],
+    placedBids: IBid[],
     createdAt?: Date,
 }
 
-const schema = new mongoose.Schema<ISeller>({
-    _id: Schema.Types.ObjectId,
+const schema = new mongoose.Schema<IUser>({
     username: {
         type: String,
-        required: [true, "A seller must have a name"],
-        minlength: [1, "Seller name cannot be empty."],
+        required: [true, "A user must have a name"],
+        minlength: [1, "User name cannot be empty."],
         trim: true,
         unique: true,
     },
@@ -27,11 +27,15 @@ const schema = new mongoose.Schema<ISeller>({
         },
         message: (props: {value: string}) => `${props.value} is not a valid email address.`,
     },
+    password: {
+        type: String,
+        required: [true, "A User must have a password"],
+    },
     shirts: [{type: Schema.Types.ObjectId, ref: "Shirt"}],
-    orders: [{type: Schema.Types.ObjectId, ref: "Order"}],
+    placedBids: [{type: Schema.Types.ObjectId, ref: "Bid"}],
     createdAt: {
         type: Date,
-        immutable: true,
+        immutable: [true, "Cannot change createdAt"],
     }
 });
 

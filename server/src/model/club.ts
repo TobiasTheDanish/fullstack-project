@@ -11,7 +11,6 @@ export interface IClub extends Document {
 }
 
 const schema = new mongoose.Schema<IClub>({
-    _id: Schema.Types.ObjectId,
     name: {
         type: String,
         required: [true, "A club must have a name"],
@@ -20,23 +19,29 @@ const schema = new mongoose.Schema<IClub>({
         unique: true,
     },
     league: {type: Schema.Types.ObjectId, ref: 'League'},
-    shirts: [
-        {type: Schema.Types.ObjectId, ref: 'Shirt'}
-    ],
     createdAt: {
         type: Date,
-        immutable: true,
+        immutable: [true, "Cannot change createdAt"],
     },
+});
+
+schema.virtual('shirts', {
+    ref: 'Shirt',
+    localField: '_id',
+    foreignField: 'club',
 });
 
 // populate on find
 schema.pre('find', function() {
     this.populate('league');
+    this.populate('shirts');
 });
 
 schema.post('save', function(doc, next) {
     doc.populate('league').then(function() {
-        next();
+        this.populate('shirts').then(function() {
+            next();
+        });
     });
 });
 
