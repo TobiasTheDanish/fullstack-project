@@ -42,7 +42,7 @@ const schema = new mongoose.Schema<IShirt>({
         required: [true, "A shirt must have a year"],
     },
     club: {type: Schema.Types.ObjectId, ref: "Club", required: true},
-    seller: {type: Schema.Types.ObjectId, ref: "user", required: true},
+    seller: {type: Schema.Types.ObjectId, ref: "User", required: true},
     playerName: {
         type: String,
         trim: true,

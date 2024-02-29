@@ -6,6 +6,9 @@ import { Bid } from "../model/bid";
 import { ObjectId } from "mongodb";
 import { populate } from "dotenv";
 
+User.toString()
+Bid.toString()
+
 export const typeDefs = `#graphql
 	type League {
 		_id: ID!,
