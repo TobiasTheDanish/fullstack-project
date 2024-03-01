@@ -1,14 +1,10 @@
 import './App.css'
-import { ClubList } from './components/ClubList'
-import LeagueList from './components/LeagueList'
-import ShirtList from './components/ShirtList'
+import Navbar from './components/navbar/Navbar'
 
 function App() {
   return (
     <>
-      <ShirtList/>
-      <ClubList/>
-      <LeagueList/>
+      <Navbar/>
     </>
   )
 }

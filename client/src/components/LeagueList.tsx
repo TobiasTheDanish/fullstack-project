@@ -28,6 +28,7 @@ function LeagueListRenderer({allLeagues: leagues}: QueryGetLeagues) {
                 
                 return (
                     <div key={league._id}>
+                        <hr />
                         <h3>League: {league.name}</h3>
                         <p>Country: {league.country}</p>
                     </div>
