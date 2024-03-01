@@ -5,6 +5,10 @@ import { IBid } from "./bid";
 
 export type ShirtCondition = "New" | "Used" | "Damaged"
 
+export const isShirtCondition = (cond: string): cond is ShirtCondition => {
+    return cond === "New" || cond === "Used" || cond === "Damaged"
+};
+
 export interface IShirt extends Document {
     _id: string,
     title: string,
