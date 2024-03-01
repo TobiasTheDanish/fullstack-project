@@ -130,15 +130,12 @@ export const typeDefs = `#graphql
 export const resolvers = {
 	Query: {
 		allLeagues: async () => {
-			console.log("Start finding leagues");
 			return League.find().then((data) => data);
 		},
 		allClubs: async () => {
-			console.log("Start finding clubs");
 			return Club.find().then((data) => data);
 		},
 		allClubsByLeague: async (_: never, {leagueId}) => {
-			console.log("Start finding clubs by league")
 			return Club.find({"league._id": leagueId});
 		},
 		allShirts: async () => {
