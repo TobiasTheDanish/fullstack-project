@@ -23,6 +23,6 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: "main"
+          JAVASCRIPT_DEFAULT_STYLE:	prettier	
+          JAVASCRIPT_ES_CONFIG_FILE: ./client/.eslintrc.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
