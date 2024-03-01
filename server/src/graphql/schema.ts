@@ -1,8 +1,9 @@
 import { League } from "../model/league";
 import { Club } from "../model/club";
-import { IShirt, Shirt } from "../model/shirt"
+import { IShirt, Shirt, isShirtCondition } from "../model/shirt"
 import { ObjectId } from "mongodb";
 import { Bid } from "../model/bid";
+import { User } from "../model/user";
 
 User.toString()
 Bid.toString()
@@ -113,6 +114,10 @@ export const typeDefs = `#graphql
 		shirtsByClub(clubId: ID): [Shirt],
 		shirtById(shirtId: ID): Shirt,
 		shirtsByUserId(userId: ID): [Shirt],
+		shirtsByCondition(cond: String): [Shirt],
+		shirtsByYear(year: String): [Shirt],
+		bidsByShirtId(shirtId: ID): [Bid],
+		bidsByUserId(userId: ID): [Bid],
 	}
 
 	type Mutation {
@@ -139,11 +144,11 @@ export const resolvers = {
 			return Club.find({"league._id": leagueId});
 		},
 		allShirts: async () => {
-			return Shirt.find()
+			return await Shirt.find()
 				.populate('club')
 				.populate('seller')
 				.populate('bids')
-				.then((data) => data);
+				.populate('activeBids');
 		},
 		shirtsByLeague: async (_: never, {leagueId}: {leagueId: string}) => {
 			const league = await League
@@ -151,7 +156,10 @@ export const resolvers = {
 				.populate({
 					path: 'clubs',
 					populate: {
-						path: 'shirts'
+						path: 'shirts',
+						populate: {
+							path: "bids activeBids seller"
+						}
 					}
 				});
 
@@ -177,7 +185,12 @@ export const resolvers = {
 			}
 
 			if (!club?.populated('shirts')) {
-				await club?.populate('shirts');
+				await club?.populate({
+					path: 'shirts',
+					populate: {
+						path: "bids activeBids seller"
+					}
+				});
 			}
 
 			return club.shirts;
@@ -187,7 +200,43 @@ export const resolvers = {
 		},
 		shirtsByUserId: async (_: never, {userId}) => {
 			return Shirt.find({"user._id": userId});
-		}
+		},
+		shirtsByCondition: async (_: never, {cond}: {cond: string}) => {
+			if (isShirtCondition(cond)) {
+				return await Shirt.find({condition: cond})
+				.populate('bids')
+				.populate('activeBids')
+				.populate('club')
+				.populate('seller');
+			} else {
+				return []
+			}
+		},
+		shirtsByYear: async (_: never, {year}: {year: string}) => {
+			return await Shirt.find({year})
+				.populate('bids')
+				.populate('activeBids')
+				.populate('club')
+				.populate('seller');
+		},
+		bidsByShirtId: async (_: never, {shirtId}: {shirtId: string}) => {
+			const shirt = await Shirt.findById(shirtId).populate('bids');
+			
+			if (!shirt) {
+				return [];
+			}
+
+			return shirt.bids;
+		},
+		bidsByUserId: async (_: never, {bidId}: {bidId: string}) => {
+			const user = await User.findById(bidId).populate('placedBids');
+			
+			if (!user) {
+				return [];
+			}
+
+			return user.placedBids;
+		},
 	},
 	Mutation: {
 		createShirt: async (_: never, {input}: CreateShirtArgs) => {
