@@ -2,7 +2,7 @@ import { League } from "../model/league";
 import { Club } from "../model/club";
 import { IShirt, Shirt } from "../model/shirt"
 import { ObjectId } from "mongodb";
-import { Bid, IBid } from "../model/bid";
+import { Bid } from "../model/bid";
 
 export const typeDefs = `#graphql
 	type League {
