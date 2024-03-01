@@ -75,7 +75,7 @@ schema.virtual('activeBids', {
     ref: "Bid",
     localField: '_id',
     foreignField: 'shirt',
-    match: { declined: false },
+    match: { declined: false, expiryDate: {$gte: Date.now()} },
 });
 
 schema.pre('save', function(next) {
@@ -90,19 +90,14 @@ schema.post('save', async function(_doc, next) {
     try {
         const sellerId = this.seller;
         const shirtId = this._id;
-        const clubId = this.club;
 
-        if (sellerId && clubId && shirtId) {
-            const seller = await mongoose.model('Seller').findById(sellerId);
-            const club = await mongoose.model('Club').findById(clubId);
+        if (sellerId && shirtId) {
+            const seller = await mongoose.model('User').findById(sellerId);
+            seller.populate('shirts');
 
             if (seller) {
                 seller.shirts.push(shirtId);
                 await seller.save();
-            }
-            if (club) {
-                club.shirts.push(shirtId);
-                await club.save();
             }
         }
 
