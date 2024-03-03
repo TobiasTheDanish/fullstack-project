@@ -10,9 +10,8 @@ const Navbar = () => {
         display: 'flex',
         flexDirection: 'column',
         margin: '0 auto',
-        textAlign: 'center',
+        textAlign: 'left',
     };
-
 
     const navbarStyle = {
     backgroundColor: '#333',
@@ -43,7 +42,6 @@ const Navbar = () => {
             All Shirts
           </Link>
         </div>
-
         <Routes>
           <Route path="/leagues" element={<LeagueList />} />
           <Route path="/clubs" element={<ClubList />} />
