@@ -26,6 +26,7 @@ function ClubListRenderer({allClubs: clubs}: ClubListRendererProps) {
       {clubs.map(club => {
         return (
           <div key={club._id}>
+            <hr />
             <h3>Name: {club.name}</h3>
             <p>League: {club.league.name}</p>
             <p>Country: {club.league.country}</p>
