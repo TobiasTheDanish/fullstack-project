@@ -5,9 +5,6 @@ import { ObjectId } from "mongodb";
 import { Bid } from "../model/bid";
 import { User } from "../model/user";
 
-User.toString()
-Bid.toString()
-
 export const typeDefs = `#graphql
 	type League {
 		_id: ID!,
