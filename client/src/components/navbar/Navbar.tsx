@@ -1,55 +1,31 @@
-import React from 'react';
-import { Link, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ClubList } from '../ClubList';
-import LeagueList from '../LeagueList';
-import ShirtList from '../ShirtList';
+import './Navbar.css'
+import { Link, NavLink } from 'react-router-dom';
+import { CircleUserRound, Home } from 'lucide-react';
 
-const Navbar = () => {
-
-    const navbarContainer = {
-        display: 'flex',
-        flexDirection: 'column',
-        margin: '0 auto',
-        textAlign: 'left',
-    };
-
-    const navbarStyle = {
-    backgroundColor: '#333',
-    padding: '10px',
-    display: 'flex',
-    justifyContent: 'space-around',
-    color: 'white',
-    };
-
-    const menuStyle = {
-    textDecoration: 'none',
-    color: 'white',
-    margin: '0 10px',
-    cursor: 'pointer',
-    };
-
+export const Navbar = () => {
   return (
-    <Router>
-      <div style={navbarContainer}>
-        <div style={navbarStyle}>
-          <Link to="/leagues" style={menuStyle}>
-            Leagues
-          </Link>
-          <Link to="/clubs" style={menuStyle}>
-            Clubs
-          </Link>
-          <Link to="/all-shirts" style={menuStyle}>
-            All Shirts
-          </Link>
-        </div>
-        <Routes>
-          <Route path="/leagues" element={<LeagueList />} />
-          <Route path="/clubs" element={<ClubList />} />
-          <Route path="/all-shirts" element={<ShirtList />} />
-        </Routes>
+    <div className='navbarContainer'>
+      <div className='iconContainer'>
+        <NavLink to="/" className="linkIcon">
+          <Home color="#ffffff" width="32" height="32" />
+        </NavLink>
       </div>
-    </Router>
+      <div className='linkContainer'>
+        <NavLink to="/leagues" className="link" >
+          Leagues
+        </NavLink>
+        <NavLink to="/clubs" className="link">
+          Clubs
+        </NavLink>
+        <NavLink to="/all-shirts" className="link">
+          All Shirts
+        </NavLink>
+      </div>
+      <div className='iconContainer'>
+        <Link to="/profile" className="linkIcon">
+          <CircleUserRound color="#ffffff" width="32" height="32" />
+        </Link>
+      </div>
+    </div>
   );
 };
-
-export default Navbar;
