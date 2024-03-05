@@ -5,6 +5,10 @@ import { IBid } from "./bid";
 
 export type ShirtCondition = "New" | "Used" | "Damaged"
 
+export const isShirtCondition = (cond: string): cond is ShirtCondition => {
+    return cond === "New" || cond === "Used" || cond === "Damaged"
+};
+
 export interface IShirt extends Document {
     _id: string,
     title: string,
@@ -42,7 +46,7 @@ const schema = new mongoose.Schema<IShirt>({
         required: [true, "A shirt must have a year"],
     },
     club: {type: Schema.Types.ObjectId, ref: "Club", required: true},
-    seller: {type: Schema.Types.ObjectId, ref: "user", required: true},
+    seller: {type: Schema.Types.ObjectId, ref: "User", required: true},
     playerName: {
         type: String,
         trim: true,
@@ -75,48 +79,31 @@ schema.virtual('activeBids', {
     ref: "Bid",
     localField: '_id',
     foreignField: 'shirt',
-    match: { declined: false },
+    match: { declined: false, expiryDate: {$gte: Date.now()} },
 });
 
 schema.pre('save', function(next) {
-    if (!this.createdAt) {
+    if (this.isNew && !this.createdAt) {
         this.createdAt = new Date();
     }
 
     next();
 })
 
-schema.pre('find', async function (next) {
-    await this.populate('seller');
-    await this.populate('club');
-    await this.populate('bids');
-
-    next();
-});
-
-schema.post('save', async function(doc, next) {
+schema.post('save', async function(_doc, next) {
     try {
         const sellerId = this.seller;
         const shirtId = this._id;
-        const clubId = this.club;
 
-        if (sellerId && clubId && shirtId) {
-            const seller = await mongoose.model('Seller').findById(sellerId);
-            const club = await mongoose.model('Club').findById(clubId);
+        if (sellerId && shirtId) {
+            const seller = await mongoose.model('User').findById(sellerId);
+            seller.populate('shirts');
 
             if (seller) {
                 seller.shirts.push(shirtId);
                 await seller.save();
             }
-            if (club) {
-                club.shirts.push(shirtId);
-                await club.save();
-            }
         }
-
-        await doc.populate('seller');
-        await doc.populate('club');
-        await doc.populate('bids');
 
         next();
     } catch (error) {
