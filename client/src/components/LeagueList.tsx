@@ -37,9 +37,3 @@ function LeagueListRenderer({allLeagues: leagues}: QueryGetLeagues) {
         </div>
     )
 }
-<<<<<<< HEAD
-
- 
-export default LeagueList;
-=======
->>>>>>> e6b8fe5 (remove default export)
