@@ -107,6 +107,8 @@ export const typeDefs = `#graphql
 		allClubs: [Club],
 		allClubsByLeague(leagueId: ID): [Club],
 		allShirts: [Shirt],
+		leagueById(leagueId: ID): League,
+		clubById(clubId: ID): Club,
 		shirtsByLeague(leagueId: ID): [Shirt],
 		shirtsByClub(clubId: ID): [Shirt],
 		shirtById(shirtId: ID): Shirt,
