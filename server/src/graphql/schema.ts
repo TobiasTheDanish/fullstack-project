@@ -138,7 +138,7 @@ export const resolvers = {
 			return Club.find().then((data) => data);
 		},
 		allClubsByLeague: async (_: never, {leagueId}: {leagueId: string}) => {
-			return Club.find({"league": new ObjectId(leagueId)});
+			return await Club.find({"league": new ObjectId(leagueId)});
 		},
 		allShirts: async () => {
 			return await Shirt.find()
@@ -146,6 +146,15 @@ export const resolvers = {
 				.populate('seller')
 				.populate('bids')
 				.populate('activeBids');
+		},
+		leagueById: async (_: never, {leagueId}: {leagueId: string}) => {
+			return await League.findById(leagueId)
+				.populate('clubs');
+		},
+		clubById: async (_: never, {clubId}: {clubId: string}) => {
+			return Club.findById(clubId)
+				.populate('shirts')
+				.populate('league');
 		},
 		shirtsByLeague: async (_: never, {leagueId}: {leagueId: string}) => {
 			const league = await League
