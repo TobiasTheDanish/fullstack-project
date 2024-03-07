@@ -196,7 +196,7 @@ export const resolvers = {
 				await club?.populate({
 					path: 'shirts',
 					populate: {
-						path: "bids activeBids seller"
+						path: "bids activeBids seller club"
 					}
 				});
 			}
