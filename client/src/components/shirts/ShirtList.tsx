@@ -8,7 +8,7 @@ interface ShirtListProps {
 }
 
 export const ShirtList = (props: ShirtListProps | undefined) => {
-  if (!props || !props.type || !props.id) {
+  if (!props || (!props.type || !props.id)) {
     return <AllShirtList />;
   } else if (props.type == "league") {
     return <LeagueShirtList leagueId={props.id} />
