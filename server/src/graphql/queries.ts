@@ -133,3 +133,20 @@ export const bidsByUserId = async (_: never, {bidId}: {bidId: string}) => {
 
 	return user.placedBids;
 }
+
+export default {
+		allLeagues,
+		allClubs,
+		allClubsByLeague,
+		allShirts,
+		leagueById,
+		clubById,
+		shirtsByLeague,
+		shirtsByClub,
+		shirtById,
+		shirtsByUserId,
+		shirtsByCondition,
+		shirtsByYear,
+		bidsByShirtId,
+		bidsByUserId,
+	}
