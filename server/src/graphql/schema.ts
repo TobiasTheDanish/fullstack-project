@@ -1,9 +1,7 @@
-import { League } from "../model/league";
-import { Club } from "../model/club";
-import { IShirt, Shirt, isShirtCondition } from "../model/shirt"
+import { Shirt } from "../model/shirt"
 import { ObjectId } from "mongodb";
 import { Bid } from "../model/bid";
-import { User } from "../model/user";
+import { allClubs, allClubsByLeague, allLeagues, allShirts, bidsByShirtId, bidsByUserId, clubById, leagueById, shirtById, shirtsByClub, shirtsByCondition, shirtsByLeague, shirtsByUserId, shirtsByYear } from "./queries";
 
 export const typeDefs = `#graphql
 	type League {
@@ -133,118 +131,20 @@ export const typeDefs = `#graphql
 
 export const resolvers = {
 	Query: {
-		allLeagues: async () => {
-			return League.find().then((data) => data);
-		},
-		allClubs: async () => {
-			return Club.find().then((data) => data);
-		},
-		allClubsByLeague: async (_: never, {leagueId}: {leagueId: string}) => {
-			return await Club.find({"league": new ObjectId(leagueId)});
-		},
-		allShirts: async () => {
-			return await Shirt.find()
-				.populate('club')
-				.populate('seller')
-				.populate('bids')
-				.populate('activeBids');
-		},
-		leagueById: async (_: never, {leagueId}: {leagueId: string}) => {
-			return await League.findById(leagueId)
-				.populate('clubs');
-		},
-		clubById: async (_: never, {clubId}: {clubId: string}) => {
-			return Club.findById(clubId)
-				.populate('shirts')
-				.populate('league');
-		},
-		shirtsByLeague: async (_: never, {leagueId}: {leagueId: string}) => {
-			const league = await League
-				.findOne({_id: new ObjectId(leagueId)})
-				.populate({
-					path: 'clubs',
-					populate: {
-						path: 'shirts',
-						populate: {
-							path: "bids activeBids seller club"
-						}
-					}
-				});
-
-			if (!league) {
-				return [];
-			}
-			const clubs = league.clubs
-
-			const shirts: IShirt[] = [];
-
-			clubs.forEach(club => {
-				club.shirts.forEach(shirt => {
-					shirts.push(shirt);
-				});
-			});
-
-			return shirts;
-		},
-		shirtsByClub: async (_: never, {clubId}: {clubId: string}) => {
-			const club = await Club.findOne({_id: new ObjectId(clubId)});
-			if (!club) {
-				return [];
-			}
-
-			if (!club?.populated('shirts')) {
-				await club?.populate({
-					path: 'shirts',
-					populate: {
-						path: "bids activeBids seller club"
-					}
-				});
-			}
-
-			return club.shirts;
-		},
-		shirtById: async (_: never, {shirtId}) => {
-			return Shirt.findById(shirtId);
-		},
-		shirtsByUserId: async (_: never, {userId}) => {
-			return Shirt.find({"user._id": userId});
-		},
-		shirtsByCondition: async (_: never, {cond}: {cond: string}) => {
-			if (isShirtCondition(cond)) {
-				return await Shirt.find({condition: cond})
-				.populate('bids')
-				.populate('activeBids')
-				.populate('club')
-				.populate('seller');
-			} else {
-				return []
-			}
-		},
-		shirtsByYear: async (_: never, {year}: {year: string}) => {
-			return await Shirt.find({year})
-				.populate('bids')
-				.populate('activeBids')
-				.populate('club')
-				.populate('seller');
-		},
-		bidsByShirtId: async (_: never, {shirtId}: {shirtId: string}) => {
-			const shirt = await Shirt.findById(shirtId).populate('bids');
-			
-			if (!shirt) {
-				return [];
-			}
-
-			return shirt.bids;
-		},
-		bidsByUserId: async (_: never, {bidId}: {bidId: string}) => {
-			const user = await User.findById(bidId).populate('placedBids');
-			
-			if (!user) {
-				return [];
-			}
-
-			return user.placedBids;
-		},
+		allLeagues,
+		allClubs,
+		allClubsByLeague,
+		allShirts,
+		leagueById,
+		clubById,
+		shirtsByLeague,
+		shirtsByClub,
+		shirtById,
+		shirtsByUserId,
+		shirtsByCondition,
+		shirtsByYear,
+		bidsByShirtId,
+		bidsByUserId,
 	},
 	Mutation: {
 		createShirt: async (_: never, {input}: CreateShirtArgs) => {
