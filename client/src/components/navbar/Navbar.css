@@ -1,0 +1,53 @@
+.navbarContainer {
+	position: static;
+	top: 0;
+	left: 0;
+	display: flex;
+	margin: 0 auto;
+	text-align: left;
+	width: 98vw;
+}
+
+.linkContainer {
+	padding: 10px;
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}
+
+.link {
+	text-decoration: none;
+	background-color: #F7F7F7;
+	color: #333;
+	margin: 0 10px;
+	padding: 6px 12px;
+	cursor: pointer;
+	border-radius: 8px;
+}
+
+.link:hover {
+	background-color: #B3B3B3;
+	color: #333;
+	text-decoration: underline;
+}
+
+.iconContainer {
+	display: flex;
+	width: 50px;
+	align-items: center;
+	justify-content: center;
+}
+
+.link.active {
+	background-color: #B3B3B3;
+}
+
+.link.active:hover {
+	text-decoration: underline;
+}
+
+.linkIcon {
+	height: 32px;
+}
