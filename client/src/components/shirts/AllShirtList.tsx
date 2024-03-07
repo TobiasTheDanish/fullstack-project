@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/client";
-import { QueryGetShirts, gqlGetShirts } from "../graphql/shirt"; 
 import { CSSProperties } from "react";
+import { QueryGetShirts, gqlGetShirts } from "../../graphql/shirt";
 
-export const ShirtList = () => {
+export function AllShirtList() {
 
   const h1Styles: CSSProperties = {
     textAlign: "center"
@@ -19,13 +19,13 @@ export const ShirtList = () => {
   return ( 
     <>
       <h1 style={h1Styles}>Shirt List</h1>
-      <ShirtListRenderer allShirts={data?.allShirts!}/>
+      <Renderer allShirts={data?.allShirts!}/>
     </>
   );
 }
 
 
-function ShirtListRenderer({ allShirts: shirts }: QueryGetShirts) {
+function Renderer({ allShirts: shirts }: QueryGetShirts) {
 
   const containerStyles = {
     fontWeight: '10px',

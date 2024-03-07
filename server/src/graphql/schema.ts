@@ -137,8 +137,8 @@ export const resolvers = {
 		allClubs: async () => {
 			return Club.find().then((data) => data);
 		},
-		allClubsByLeague: async (_: never, {leagueId}) => {
-			return Club.find({"league._id": leagueId});
+		allClubsByLeague: async (_: never, {leagueId}: {leagueId: string}) => {
+			return Club.find({"league": new ObjectId(leagueId)});
 		},
 		allShirts: async () => {
 			return await Shirt.find()
@@ -155,7 +155,7 @@ export const resolvers = {
 					populate: {
 						path: 'shirts',
 						populate: {
-							path: "bids activeBids seller"
+							path: "bids activeBids seller club"
 						}
 					}
 				});
