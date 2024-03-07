@@ -39,8 +39,22 @@ query AllClubsByLeague($leagueId: ID) {
 }
 `
 export type QueryGetClub = {
-  club: Club,
+  clubById: {
+    name: string,
+    league: {
+      name: string,
+      country: string,
+    }
+  },
+};
+export const gqlGetClub = gql`#graphql
+query ClubById($clubId: ID) {
+  clubById(clubId: $clubId) {
+    name
+    league {
+      name
+      country
+    }
+  }
 }
-// export const gqlGetClub = gql`#graphql
-//
-// `
+`
