@@ -55,13 +55,19 @@ async function main() {
 			body: buffer,
 			bucket: "football-shirts-fullstack-proj",
 			objectAccess: "public-read",
-		}, (_p) => {})
+		})
 
-		res.status(200).json({
-			message: "Upload succesfull",
-			/*@ts-ignore*/
-			path: uploadRes.Location,
-		});
+		if (uploadRes.succes) {
+			res.status(200).json({
+				message: "Upload succesfull",
+				path: uploadRes.Location,
+			});
+		} else {
+			res.status(500).json({
+				error: "Upload of file failed",
+				uploadRes,
+			});
+		}
 	});
 
 	app.listen(4000);
