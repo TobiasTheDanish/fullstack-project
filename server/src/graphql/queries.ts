@@ -3,6 +3,10 @@ import { Club } from "../model/club";
 import { ObjectId } from "mongodb";
 import { IShirt, Shirt, isShirtCondition } from "../model/shirt";
 import { User } from "../model/user";
+import { GraphQLError } from "graphql";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { GraphQLContext } from "./utils";
 
 export const allLeagues = async () => {
 	return await League.find().then((data) => data);
@@ -134,19 +138,59 @@ export const bidsByUserId = async (_: never, {bidId}: {bidId: string}) => {
 	return user.placedBids;
 }
 
-export default {
-		allLeagues,
-		allClubs,
-		allClubsByLeague,
-		allShirts,
-		leagueById,
-		clubById,
-		shirtsByLeague,
-		shirtsByClub,
-		shirtById,
-		shirtsByUserId,
-		shirtsByCondition,
-		shirtsByYear,
-		bidsByShirtId,
-		bidsByUserId,
+interface Credentials {
+	username: string,
+	password: string,
+}
+export const userSignIn = async(_: never, {username, password}: Credentials, context: GraphQLContext) => {
+	const user = await User.findOne({username: username});
+
+	if (!user) {
+		throw new GraphQLError("Invalid username", {
+			extensions: {
+				code: 'BAD_CREDENTIALS',
+			},
+		});
 	}
+
+	const match = await bcrypt.compare(password, user.password);
+
+	if (!match) {
+		throw new GraphQLError("Invalid username or password", {
+			extensions: {
+				code: 'BAD_CREDENTIALS',
+			},
+		});
+	}
+
+	try {
+		const token = jwt.sign({userId: user._id}, context.jwtSecret, {expiresIn: '1d'});
+
+		return token
+	} catch (e) {
+		throw new GraphQLError("Could not sign JWT.", {
+			extensions: {
+				code: 'INTERNAL_SERVER_ERROR',
+			},
+			originalError: e,
+		});
+	}
+}
+
+export default {
+	allLeagues,
+	allClubs,
+	allClubsByLeague,
+	allShirts,
+	leagueById,
+	clubById,
+	shirtsByLeague,
+	shirtsByClub,
+	shirtById,
+	shirtsByUserId,
+	shirtsByCondition,
+	shirtsByYear,
+	bidsByShirtId,
+	bidsByUserId,
+	userSignIn,
+}

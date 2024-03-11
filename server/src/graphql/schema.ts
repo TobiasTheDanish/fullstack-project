@@ -23,7 +23,6 @@ export const typeDefs = `#graphql
 		condition: String!,
 		year: String!,
 		clubId: ID!,
-		sellerId: ID!,
 		playerName: String,
 		playerNumber: Int,
 		price: Int!,
@@ -36,7 +35,6 @@ export const typeDefs = `#graphql
 		condition: String!,
 		year: String!,
 		clubId: ID!,
-		sellerId: ID!,
 		playerName: String,
 		playerNumber: Int,
 		price: Int!,
@@ -72,14 +70,12 @@ export const typeDefs = `#graphql
 	}
 
 	input CreateBidInput {
-		ownerId: ID!,
 		shirtId: ID!,
 		amount: Int,
 		expiryDate: String
 	}
 
 	input UpdateBidInput {
-		owner: ID!,
 		shirt: ID!,
 		amount: Int,
 		expiryDate: String,
@@ -113,6 +109,7 @@ export const typeDefs = `#graphql
 		shirtsByYear(year: String): [Shirt],
 		bidsByShirtId(shirtId: ID): [Bid],
 		bidsByUserId(userId: ID): [Bid],
+		userSignIn(username: String!, password: String!): String,
 	}
 
 	type Mutation {
@@ -124,6 +121,7 @@ export const typeDefs = `#graphql
 		createBid(input: CreateBidInput): Bid,
 		updateBid(bidId: ID!, input: UpdateBidInput): Bid,
 		deleteBidById(bidId: ID!): Bid,
+		userSignUp(username: String!, email: String!, password: String!): String,
 	}
 `;
 

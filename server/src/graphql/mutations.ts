@@ -1,6 +1,11 @@
 import { ObjectId } from "mongodb";
 import { Shirt } from "../model/shirt";
 import { Bid } from "../model/bid";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { GraphQLError } from "graphql";
+import { User } from "../model/user";
+import { authenticate, GraphQLContext } from "./utils";
 
 interface CreateShirtArgs {
 	input: {
@@ -9,7 +14,6 @@ interface CreateShirtArgs {
 		condition: string,
 		year: string,
 		clubId: string,
-		sellerId: string,
 		playerName: string,
 		playerNumber: number,
 		price: number,
@@ -17,11 +21,11 @@ interface CreateShirtArgs {
 	}
 }
 
-export const createShirt = async (_: never, {input}: CreateShirtArgs) => {
+export const createShirt = async (_: any, {input}: CreateShirtArgs, context: GraphQLContext) => {
 	const newShirt = await Shirt.create({
 		_id: new ObjectId(),
 		club: new ObjectId(input.clubId),
-		seller: new ObjectId(input.sellerId),
+		seller: new ObjectId(context.userId!),
 		...input
 	});
 
@@ -39,7 +43,6 @@ interface UpdateShirtArgs {
 		condition: string,
 		year: string,
 		club: string,
-		seller: string,
 		playerName: string,
 		playerNumber: number,
 		bids: [string],
@@ -50,40 +53,48 @@ interface UpdateShirtArgs {
 	}
 }
 
-export const updateShirt = async (_: never, {shirtId, input}: UpdateShirtArgs) => {
-	await Shirt.updateOne({_id: shirtId}, {...input})
+export const updateShirt = async (_: any, {shirtId, input}: UpdateShirtArgs, context: GraphQLContext) => {
+	await Shirt.updateOne({_id: shirtId, seller: context.userId}, {...input, seller: context.userId})
 	return await Shirt.findById(shirtId)
 		.populate('club')
 		.populate('seller');
 }
 
-export const deleteShirtById = async (_: never, {shirtId}: {shirtId: string}) => {
-	return await Shirt.findByIdAndDelete(shirtId);
+export const deleteShirtById = async (_: any, {id}: {id: string}, context: GraphQLContext) => {
+	const shirt = await Shirt.findOneAndDelete({_id: new ObjectId(id), seller: new ObjectId(context.userId)});
+	if (!shirt) {
+		throw new GraphQLError(`Could not find and delete shirt with id: ${id}, and sellerId: ${context.userId}`, {
+			extensions: {
+				code: "INTERNAL_SERVER_ERROR",
+			}
+		});
+	}
+
+	return shirt;
 }
 
-export const acceptBid = async (_: never, {bidId}: {bidId: string}) => {
-	await Bid.updateOne({_id: bidId}, {accepted: true});
+export const acceptBid = async (_: any, {bidId}: {bidId: string}, context: GraphQLContext) => {
+	await Bid.updateOne({_id: bidId, owner: context.userId}, {accepted: true});
 	return await Bid.findById(bidId);
 }
 
-export const declineBid = async (_: never, {bidId}: {bidId: string}) => {
-	await Bid.updateOne({_id: bidId}, {declined: true});
+export const declineBid = async (_: any, {bidId}: {bidId: string}, context: GraphQLContext) => {
+	await Bid.updateOne({_id: bidId, owner: context.userId}, {declined: true});
 	return await Bid.findById(bidId);
 }
 
 interface CreateBidArgs {
 	input: {
-		ownerId: string,
 		shirtId: string,
 		amount: number,
 		expiryDate: string
 	}
 }
 
-export const createBid = async (_: never, {input}: CreateBidArgs) => {
+export const createBid = async (_: any, {input}: CreateBidArgs, context: GraphQLContext) => {
 	const newBid = await Bid.create({
 		_id: new ObjectId(),
-		owner: new ObjectId(input.ownerId),
+		owner: new ObjectId(context.userId),
 		shirt: new ObjectId(input.shirtId),
 		expiryDate: new Date(input.expiryDate),
 		amount: input.amount,
@@ -98,7 +109,6 @@ export const createBid = async (_: never, {input}: CreateBidArgs) => {
 interface UpdateBidArgs {
 	bidId: string, 
 	input: {
-		owner: string,
 		shirt: string,
 		amount: number,
 		expiryDate: string,
@@ -107,24 +117,55 @@ interface UpdateBidArgs {
 	}
 }
 
-export const updateBid = async (_: never, {bidId, input}: UpdateBidArgs) => {
-	await Bid.updateOne({_id: bidId}, {...input})
+export const updateBid = async (_: any, {bidId, input}: UpdateBidArgs, context: GraphQLContext) => {
+	await Bid.updateOne({_id: bidId, owner: context.userId}, {...input, owner: context.userId})
 	return await Bid.findById(bidId)
 		.populate('shirt')
 		.populate('owner');
 }
 
-export const deleteBidById = async (_: never, {bidId}: {bidId: string}) => {
-	return Bid.findByIdAndDelete(bidId);
+export const deleteBidById = async (_: any, {bidId}: {bidId: string}, context: GraphQLContext) => {
+	return Bid.findOneAndDelete({_id: bidId, owner: context.userId});
+}
+
+interface Credentials {
+	username: string,
+	email: string,
+	password: string,
+}
+export const userSignUp = async(_: never, {username, email, password}: Credentials, context: GraphQLContext) => {
+	try {
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		const user = await User.create({
+			username: username,
+			email: email,
+			password: hashedPassword,
+			shirts: [],
+			placedBids: [],
+		});
+
+		const token = jwt.sign({userId: user._id}, context.jwtSecret, {expiresIn: '1d'});
+
+		return token;
+	} catch (e) {
+		throw new GraphQLError("An error occurred during sign up", {
+			extensions: {
+				code: 'INTERNAL_SERVER_ERROR',
+			},
+			originalError: e,
+		});
+	}
 }
 
 export default {
-	createShirt,
-	updateShirt,
-	deleteShirtById,
-	acceptBid,
-	declineBid,
-	createBid,
-	updateBid,
-	deleteBidById,
+	createShirt: authenticate(createShirt),
+	updateShirt: authenticate(updateShirt),
+	deleteShirtById: authenticate(deleteShirtById),
+	acceptBid: authenticate(acceptBid),
+	declineBid: authenticate(declineBid),
+	createBid: authenticate(createBid),
+	updateBid: authenticate(updateBid),
+	deleteBidById: authenticate(deleteBidById),
+	userSignUp,
 }
