@@ -46,6 +46,7 @@ export function CreateShirtForm() {
       variables: {
         input: shirt,
       },
+      
     });
   }
 
