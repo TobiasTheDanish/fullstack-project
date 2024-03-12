@@ -24,6 +24,7 @@ export const gqlGetShirts = gql`
       playerNumber
       price
       minPrice
+      createdAt
     }
   }
 `;
