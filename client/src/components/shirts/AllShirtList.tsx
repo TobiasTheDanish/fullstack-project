@@ -1,15 +1,22 @@
 import { useQuery } from "@apollo/client";
 import { CSSProperties } from "react";
 import { QueryGetShirts, gqlGetShirts } from "../../graphql/shirt";
+import { Shirt } from "../../graphql/types";
 
-export function AllShirtList() {
+export function AllShirtList({ shirts }: {shirts?: Shirt[]}) {
 
   const h1Styles: CSSProperties = {
     textAlign: "center"
   }
 
   const { data, loading } = useQuery<QueryGetShirts>(gqlGetShirts);
-
+  if(shirts) {
+    return ( 
+      <>
+        <Renderer allShirts={shirts}/>
+      </>
+    ); 
+  }
   if(loading) {
     return (
       <h1 style={h1Styles}>Loading Shirts</h1>
@@ -18,7 +25,7 @@ export function AllShirtList() {
 
   return ( 
     <>
-      <h1 style={h1Styles}>Shirt List</h1>
+      
       <Renderer allShirts={data?.allShirts!}/>
     </>
   );
