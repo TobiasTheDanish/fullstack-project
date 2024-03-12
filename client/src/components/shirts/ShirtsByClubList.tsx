@@ -1,14 +1,18 @@
 import { useQuery } from "@apollo/client";
-import { QueryGetShirts, gqlGetShirts } from "../graphql/shirt"; 
 import { CSSProperties } from "react";
+import { QueryGetShirtsByClub, gqlGetShirtsByClub } from "../../graphql/shirt";
 
-export const ShirtList = () => {
+interface ShirtListProps {
+  clubId: string,
+}
+export const ClubShirtList = (props: ShirtListProps) => {
+  const { data, loading } = useQuery<QueryGetShirtsByClub>(gqlGetShirtsByClub, {
+    variables: {clubId: props.clubId},
+  });
 
   const h1Styles: CSSProperties = {
     textAlign: "center"
   }
-
-  const { data, loading } = useQuery<QueryGetShirts>(gqlGetShirts);
 
   if(loading) {
     return (
@@ -16,16 +20,22 @@ export const ShirtList = () => {
     );
   }
 
+  if(!data || !data.shirtsByClub || data.shirtsByClub.length == 0) {
+    return (
+      <h1 style={h1Styles}>No Shirts found</h1>
+    );
+  }
+
   return ( 
     <>
       <h1 style={h1Styles}>Shirt List</h1>
-      <ShirtListRenderer allShirts={data?.allShirts!}/>
+      <Renderer shirtsByClub={data.shirtsByClub}/>
     </>
   );
 }
 
 
-function ShirtListRenderer({ allShirts: shirts }: QueryGetShirts) {
+function Renderer({ shirtsByClub: shirts }: QueryGetShirtsByClub) {
 
   const containerStyles = {
     fontWeight: '10px',

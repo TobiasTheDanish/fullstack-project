@@ -23,6 +23,7 @@ export interface IShirt extends Document {
     activeBids: IBid[],
     price: number,
     minPrice: number,
+    imageUrls: string[],
     createdAt?: Date,
 }
 
@@ -63,6 +64,9 @@ const schema = new mongoose.Schema<IShirt>({
         type: Number,
         min: [1, "minPrice cannot be 0 or less"],
     },
+    imageUrls: [
+        {type: String},
+    ],
     createdAt: {
         type: Date,
         immutable: [true, "Cannot change createdAt"],
