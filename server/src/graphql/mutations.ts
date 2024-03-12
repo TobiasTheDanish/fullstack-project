@@ -17,7 +17,8 @@ interface CreateShirtArgs {
 		playerName: string,
 		playerNumber: number,
 		price: number,
-		minPrice: number
+		imageUrls: string[],
+		minPrice: number,
 	}
 }
 
@@ -49,6 +50,7 @@ interface UpdateShirtArgs {
 		activeBids: [string],
 		price: number,
 		minPrice: number,
+		imageUrls: string[],
 		createdAt: string,
 	}
 }

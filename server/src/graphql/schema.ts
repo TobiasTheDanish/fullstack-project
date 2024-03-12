@@ -26,6 +26,7 @@ export const typeDefs = `#graphql
 		playerName: String,
 		playerNumber: Int,
 		price: Int!,
+		imageUrls: [String],
 		minPrice: Int!
 	}
 
@@ -39,6 +40,7 @@ export const typeDefs = `#graphql
 		playerNumber: Int,
 		price: Int!,
 		minPrice: Int!,
+		imageUrls: [String],
 		createdAt: String,
 	}
 
@@ -56,6 +58,7 @@ export const typeDefs = `#graphql
 		activeBids: [Bid],
 		price: Int!,
 		minPrice: Int!,
+		imageUrls: [String],
 		createdAt: String,
 	}
 
