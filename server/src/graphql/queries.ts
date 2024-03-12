@@ -63,8 +63,6 @@ export const shirtsByLeague = async (_: never, {leagueId}: {leagueId: string}) =
 		club.shirts.forEach(shirt => {
 			shirts.push(shirt);
 		});
-
-
 	});
 
 	return shirts;
@@ -75,8 +73,6 @@ export const shirtsByClub = async (_: never, {clubId}: {clubId: string}) => {
 	if (!club) {
 		return [];
 	}
-
-
 
 	if (!club?.populated('shirts')) {
 		await club?.populate({

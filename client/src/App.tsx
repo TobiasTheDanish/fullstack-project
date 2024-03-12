@@ -2,6 +2,7 @@ import './App.css';
 import { Outlet, useLocation } from 'react-router-dom'
 
 function App() {
+
   const location = useLocation()
   if (location.pathname === '/') {
     return (
