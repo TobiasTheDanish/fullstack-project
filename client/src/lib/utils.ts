@@ -1,0 +1,3 @@
+export function getJWT(): string {
+	return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWYwNTUxNmJiNzM0YjkxY2Y0NmZjMGEiLCJpYXQiOjE3MTAyNDkyMzgsImV4cCI6MTcxMDMzNTYzOH0.s2tIHL6H-DQ2Sn9O6iReUecQ_MtmauzktvRfHdK1VWQ"
+}
