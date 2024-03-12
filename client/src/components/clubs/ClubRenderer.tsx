@@ -13,7 +13,6 @@ export function ClubRenderer({club, asLink}: {club: PartialClub, asLink?: boolea
   }
 
   if (!club) {
-    console.log("Cannot render an undefined club");
     return null;
   }
 
