@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Club, League } from "../../graphql/types";
 
-type PartialClub = Partial<Omit<Club, "league">> & {league?: Partial<League>}
+type PartialClub = Partial<Omit<Club, "league"> > & {league?: Partial<League>}
 
 export function ClubRenderer({club, asLink}: {club: PartialClub, asLink?: boolean}) {
   if (asLink) {
