@@ -35,6 +35,9 @@ export const Navbar = () => {
         <Link to="/profile" className="linkIcon">
           <CircleUserRound color="#ffffff" width="32" height="32" />
         </Link>
+        <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
+          <Instagram color="#ffffff" width="32" height="32" />
+        </Link>
       </div>
       <div className='iconContainer'>
         <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
