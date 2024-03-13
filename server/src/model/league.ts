@@ -5,6 +5,7 @@ export interface ILeague extends Document {
     _id: string,
     name: string,
     country: string,
+    imageUrl: string,
     clubs: IClub[],
     createdAt?: Date,
 }
@@ -16,6 +17,10 @@ const schema = new mongoose.Schema<ILeague>({
         minlength: [1, "League name cannot be empty."],
         trim: true,
         unique: true,
+    },
+    imageUrl: {
+        type: String,
+        required: [true, "A League must have an image"],
     },
     country: {
         type: String,

@@ -5,6 +5,7 @@ export const typeDefs = `#graphql
 	type League {
 		_id: ID!,
 		name: String!,
+		imageUrl: String!,
 		country: String!,
 		createdAt: String,
 	}
@@ -12,6 +13,7 @@ export const typeDefs = `#graphql
 	type Club {
 		_id: ID!,
 		name: String!,
+		imageUrl: String!,
 		league: League!,
 		shirts: [Shirt],
 		createdAt: String,
