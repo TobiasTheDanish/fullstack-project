@@ -44,6 +44,7 @@ query ShirtsByLeague($leagueId: ID) {
     description
     year
     condition
+    imageUrls
     seller {
       username
     }

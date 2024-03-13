@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { CSSProperties } from "react";
 import { QueryGetShirtsByLeague, gqlGetShirtsByLeague } from "../../graphql/shirt";
-import { RenderShirt } from ".";
+import { RenderShirt, RenderShirtGrid } from ".";
 
 
 interface ShirtListProps {
@@ -40,23 +40,7 @@ export const LeagueShirtList = (props: ShirtListProps) => {
 
 function Renderer({ shirtsByLeague: shirts }: QueryGetShirtsByLeague) {
 
-  const containerStyles = {
-    fontWeight: '10px',
-  };
-
-  const paragraphStyles = {
-    fontWeight: 'bold',
-  };
-
-  const spanStyles = {
-    fontWeight: 'normal',
-  };
-
   return (
-    <div style={containerStyles}>
-      {shirts.map((shirt) => (
-        <RenderShirt shirt={shirt} />
-      ))}
-    </div>
+    <RenderShirtGrid shirts={shirts}/>
   );
 }
