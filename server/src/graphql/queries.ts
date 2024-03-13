@@ -6,7 +6,7 @@ import { User } from "../model/user";
 import { GraphQLError } from "graphql";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { GraphQLContext } from "./utils";
+import { GraphQLContext, authenticate } from "./utils";
 
 export const allLeagues = async () => {
 	return await League.find().then((data) => data);
@@ -134,43 +134,14 @@ export const bidsByUserId = async (_: never, {bidId}: {bidId: string}) => {
 	return user.placedBids;
 }
 
-interface Credentials {
-	username: string,
-	password: string,
-}
-export const userSignIn = async(_: never, {username, password}: Credentials, context: GraphQLContext) => {
-	const user = await User.findOne({username: username});
-
-	if (!user) {
-		throw new GraphQLError("Invalid username", {
-			extensions: {
-				code: 'BAD_CREDENTIALS',
-			},
-		});
+export const signedInUser = async(_parent: any, _args: any, context: GraphQLContext) => {
+	if (!context.userId) {
+		return null;
 	}
 
-	const match = await bcrypt.compare(password, user.password);
-
-	if (!match) {
-		throw new GraphQLError("Invalid username or password", {
-			extensions: {
-				code: 'BAD_CREDENTIALS',
-			},
-		});
-	}
-
-	try {
-		const token = jwt.sign({userId: user._id}, context.jwtSecret, {expiresIn: '1d'});
-
-		return token
-	} catch (e) {
-		throw new GraphQLError("Could not sign JWT.", {
-			extensions: {
-				code: 'INTERNAL_SERVER_ERROR',
-			},
-			originalError: e,
-		});
-	}
+	return await User.findById(context.userId)
+		.populate("shirts")
+		.populate("placedBids");
 }
 
 export default {
@@ -188,5 +159,5 @@ export default {
 	shirtsByYear,
 	bidsByShirtId,
 	bidsByUserId,
-	userSignIn,
+	signedInUser: authenticate(signedInUser),
 }

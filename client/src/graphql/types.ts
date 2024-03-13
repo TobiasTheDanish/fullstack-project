@@ -30,6 +30,7 @@ export interface Shirt {
     activeBids: Bid[],
     price: number,
     minPrice: number,
+    imageUrls: string[],
     createdAt?: string,
 }
 

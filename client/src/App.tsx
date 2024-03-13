@@ -13,7 +13,6 @@ function App() {
   const { data } = useQuery<QueryGetShirts>(gqlGetShirts);
 
   useEffect (() =>  {
-    console.log(data)
     if(!data) {
       return
     }

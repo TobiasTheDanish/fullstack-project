@@ -78,3 +78,36 @@ query ShirtsByClub($clubId: ID) {
   }
 }
 `
+
+export interface CreatShirtInput {
+  clubId: string,
+  condition: string,
+  description: string,
+  imageUrls: string[],
+  minPrice: number,
+  playerName?: string,
+  playerNumber?: number,
+  price: number,
+  title: string,
+  year: string,
+}
+
+export const gqlCreateShirtMutation = gql`#graphql
+mutation CreateShirt($input: CreateShirtInput) {
+  createShirt(input: $input) {
+    _id
+    club {
+      name
+      league {
+        name
+        country
+      }
+    }
+    title
+    description
+    imageUrls
+    price
+    year
+  }
+}
+`

@@ -17,6 +17,14 @@
 	gap: 12px;
 }
 
+.signInContainer {
+	padding: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+}
+
 .link {
 	text-decoration: none;
 	background-color: #F7F7F7;
