@@ -1,10 +1,10 @@
 import './App.css';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { AllShirtList } from './components';
 import { useQuery } from '@apollo/client';
 import { QueryGetShirts, gqlGetShirts } from './graphql/shirt';
 import { Shirt } from './graphql/types';
 import { useEffect, useState } from 'react';
+import RecentlyAddedShirts from './components/shirts/RecentlyAddedShirts';
 
 function App() {
   const location = useLocation();
@@ -46,7 +46,7 @@ function App() {
           </div>
           <div className="recently-added">
             <h2>Recently Added</h2>
-            <AllShirtList shirts={shirts}/>
+            <RecentlyAddedShirts shirts={shirts}/>
           </div>
         </div>
       </>

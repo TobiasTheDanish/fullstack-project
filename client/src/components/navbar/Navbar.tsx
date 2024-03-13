@@ -1,6 +1,6 @@
 import './Navbar.css'
 import { Link, NavLink } from 'react-router-dom';
-import { CircleUserRound, Home } from 'lucide-react';
+import { CircleUserRound, Home, Instagram } from 'lucide-react';
 
 export const Navbar = () => {
   return (
@@ -24,6 +24,11 @@ export const Navbar = () => {
       <div className='iconContainer'>
         <Link to="/profile" className="linkIcon">
           <CircleUserRound color="#ffffff" width="32" height="32" />
+        </Link>
+      </div>
+      <div className='iconContainer'>
+        <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
+          <Instagram color="#ffffff" width="32" height="32" />
         </Link>
       </div>
     </div>
