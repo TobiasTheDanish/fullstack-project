@@ -5,12 +5,13 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ShirtList, LeagueList, ClubList, Navbar, LeagueComponent, ClubComponent, Profile } from './components';
 import App from './App';
-import { getJWT } from './lib/utils';
+import { authManager } from './lib/utils';
+import { SignInForm } from './components/auth/SignIn';
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   headers: {
-    "Authorization": getJWT(),
+    "Authorization": authManager.getJWT(),
   },
   cache: new InMemoryCache,
 });
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </Route>
             <Route path="/all-shirts" element={<ShirtList />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path='/sign-in' element={<SignInForm />} />
           </Route>
         </Routes>
       </BrowserRouter>
