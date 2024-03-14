@@ -25,17 +25,15 @@ function App() {
     setShirts(recentlyAddedShirts)
   }, [data])
 
-
-
   if (location.pathname === '/') {
     return (
       <>
         <div id="root">
-          <div className="hero bg-cover bg-center h-screen flex items-center justify-center text-white" style={{ backgroundImage: `url(${netherlandsHomeKitImage})`, 
+          <div className="hero bg-cover bg-center sm:bg-left" 
+          style={{ backgroundImage: `url(${netherlandsHomeKitImage})`, 
           backgroundSize: 'cover', 
           backgroundPosition: 'center', 
-          height: '120vh' }}>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">Jersey Hub</h1>
+          height: '100vh' }}>
             <div className="text-center hero-content" style={{ paddingTop: '60vh' }}>
               <h2 className="text-2xl md:text-4xl font-semibold mb-10">Find your unique football shirts</h2>
               <div>
