@@ -1,50 +1,55 @@
-import './App.css';
-import { Outlet, useLocation, Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { QueryGetShirts, gqlGetShirts } from './graphql/shirt';
-import { Shirt } from './graphql/types';
-import { useEffect, useState } from 'react';
-import RecentlyAddedShirts from './components/shirts/RecentlyAddedShirts';
-import netherlandsHomeKitImage from './assets/imgs/Netherlands-Home-Kit-1988.jpg';
+import "./App.css";
+import { Outlet, useLocation, Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { QueryGetShirts, gqlGetShirts } from "./graphql/shirt";
+import { Shirt } from "./graphql/types";
+import { useEffect, useState } from "react";
+import RecentlyAddedShirts from "./components/shirts/RecentlyAddedShirts";
+import netherlandsHomeKitImage from "./assets/imgs/Netherlands-Home-Kit-1988.jpg";
 
 function App() {
   const location = useLocation();
-  const [shirts, setShirts] = useState<Shirt[]>([])
+  const [shirts, setShirts] = useState<Shirt[]>([]);
 
   const { data } = useQuery<QueryGetShirts>(gqlGetShirts);
 
   useEffect(() => {
     if (!data) {
-      return
+      return;
     }
 
-    const sortShirts: Shirt[] = [...data.allShirts].sort((a: Shirt, b: Shirt) => {
-      return parseInt(b.createdAt!) - parseInt(a.createdAt!)
-    })
+    const sortShirts: Shirt[] = [...data.allShirts].sort(
+      (a: Shirt, b: Shirt) => {
+        return parseInt(b.createdAt!) - parseInt(a.createdAt!);
+      }
+    );
     const recentlyAddedShirts: Shirt[] = sortShirts.slice(0, 4) || [];
-    setShirts(recentlyAddedShirts)
-  }, [data])
+    setShirts(recentlyAddedShirts);
+  }, [data]);
 
-  if (location.pathname === '/') {
+  if (location.pathname === "/") {
     return (
-      <div id="root" className="bg-cover bg-no-repeat bg-center" style={{ backgroundImage: `url(${netherlandsHomeKitImage})` }}>
-        <div className="flex flex-col justify-center items-center h-full text-white">
-          <h2 className="text-2xl md:text-4xl mb-4">Find your unique football shirts</h2>
-          <div>
+      <>
+        <div className="relative">
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <h2 className="text-stroke text-white text-2xl font-bold mb-2">
+              Find your unique football shirts
+            </h2>
             <Link to="/all-shirts">
-              <button className="bg-blue-500 text-white py-2 px-4 rounded transition duration-300 hover:bg-white hover:text-blue-500">
+              <button className="bg-blue-600 text-white font-bold py-2 px-20 rounded transition duration-300 hover:bg-blue-700 ">
                 Discover
               </button>
             </Link>
           </div>
+          <img src={netherlandsHomeKitImage} alt="Image" className="w-full mx-auto md:mx-0 lg:mx-0" />
         </div>
-        <div className="recently-added">
-          <h2 className="text-2xl">Recently Added</h2>
+        <div>
+        <h2 className="text-2xl">Recently Added</h2>
           <RecentlyAddedShirts shirts={shirts} />
         </div>
-      </div>
+      </>
     );
-  };
+  }
   return (
     <>
       <div id="root">
