@@ -67,8 +67,8 @@ export const typeDefs = `#graphql
 		username: String!,
 		email: String!,
 		password: String!,
-		shirts: Shirt,
-		placedBids: Bid,
+		shirts: [Shirt],
+		placedBids: [Bid],
 		createdAt: String,
 	}
 
@@ -112,7 +112,7 @@ export const typeDefs = `#graphql
 		shirtsByYear(year: String): [Shirt],
 		bidsByShirtId(shirtId: ID): [Bid],
 		bidsByUserId(userId: ID): [Bid],
-		userSignIn(username: String!, password: String!): String,
+		signedInUser: User,
 	}
 
 	type Mutation {
@@ -124,6 +124,7 @@ export const typeDefs = `#graphql
 		createBid(input: CreateBidInput): Bid,
 		updateBid(bidId: ID!, input: UpdateBidInput): Bid,
 		deleteBidById(bidId: ID!): Bid,
+		userSignIn(username: String!, password: String!): String,
 		userSignUp(username: String!, email: String!, password: String!): String,
 	}
 `;

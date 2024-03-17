@@ -1,8 +1,16 @@
-//import './Navbar.css'
-import { NavLink } from 'react-router-dom';
-import { UserRound, Home } from 'lucide-react';
+import './Navbar.css'
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { authManager } from '../../lib/utils';
+import { useEffect, useState } from 'react';
+import { CircleUserRound, Home, Instagram } from 'lucide-react';
 
 export const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsLoggedIn(authManager.isLoggedIn());
+  }, [location.pathname]);
   return (
 <div className='bg-blue-500 p-4 flex justify-between items-center'>
       <div className='flex items-center'>
@@ -21,11 +29,30 @@ export const Navbar = () => {
           All Shirts
         </NavLink>
       </div>
-      <div className='flex items-center'>
-        <NavLink to="/profile" className="text-white ml-4">
-          <UserRound width="32" height="32" />
-        </NavLink>
+      {isLoggedIn ? (
+      <>
+        <div className='iconContainer'>
+        <Link to="/profile" className="linkIcon">
+          <CircleUserRound color="#ffffff" width="32" height="32" />
+        </Link>
       </div>
+      <div className='iconContainer'>
+        <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
+          <Instagram color="#ffffff" width="32" height="32" />
+        </Link>
+      </div>
+      </>
+      ) : (
+        <div className='signInContainer'>
+          <NavLink to="/sign-in" className="link">
+            Sign In
+          </NavLink>
+          <NavLink to="/sign-up" className="link">
+            Sign up
+          </NavLink>
+        </div>
+      )
+      }
     </div>
   );
 };
