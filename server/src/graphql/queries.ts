@@ -3,9 +3,6 @@ import { Club } from "../model/club";
 import { ObjectId } from "mongodb";
 import { IShirt, Shirt, isShirtCondition } from "../model/shirt";
 import { User } from "../model/user";
-import { GraphQLError } from "graphql";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { GraphQLContext, authenticate } from "./utils";
 
 export const allLeagues = async () => {
