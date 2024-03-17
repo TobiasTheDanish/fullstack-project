@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
 import { User } from "../model/user";
 import { authenticate, GraphQLContext } from "./utils";
+import { League } from "../model/league";
+import { Club } from "../model/club";
 
 interface CreateShirtArgs {
 	input: {
@@ -130,6 +132,52 @@ export const deleteBidById = async (_: any, {bidId}: {bidId: string}, context: G
 	return Bid.findOneAndDelete({_id: bidId, owner: context.userId});
 }
 
+interface UpdateLeagueArgs {
+	leagueId: string, 
+	input: {
+		name: string,
+		country: string,
+		imageUrl: string,
+	}
+}
+
+export const updateLeague = async (_: any, {leagueId, input}: UpdateLeagueArgs) => {
+	await League.updateOne({_id: leagueId}, {...input})
+
+	return await League.findById(leagueId)
+		.populate({
+			path: 'clubs',
+			populate: {
+				path: 'shirts',
+				populate: {
+					path: "bids activeBids seller club"
+				}
+			}
+		});
+}
+
+interface UpdateClubArgs {
+	clubId: string, 
+	input: {
+		name: string,
+		league: string,
+		imageUrl: string,
+	}
+}
+
+export const updateClub = async (_: any, {clubId, input}: UpdateClubArgs) => {
+	await Club.updateOne({_id: clubId}, {...input})
+
+	return await Club.findById(clubId)
+		.populate('league')
+		.populate({
+			path: 'shirts',
+			populate: {
+				path: "bids activeBids seller club"
+			}
+		});
+}
+
 interface Credentials {
 	username: string,
 	email: string,
@@ -208,6 +256,8 @@ export default {
 	createBid: authenticate(createBid),
 	updateBid: authenticate(updateBid),
 	deleteBidById: authenticate(deleteBidById),
+	updateLeague: authenticate(updateLeague),
+	updateClub: authenticate(updateClub),
 	userSignIn,
 	userSignUp,
 }
