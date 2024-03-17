@@ -58,3 +58,16 @@ query ClubById($clubId: ID) {
   }
 }
 `
+
+export const gqlUpdateClub = gql`#graphql
+mutation UpdateClub($clubId: ID!, $input: UpdateClubInput) {
+  updateClub(clubId: $clubId, input: $input) {
+    _id
+    name
+    league {
+      name
+    }
+    imageUrl
+  }
+}
+`;
