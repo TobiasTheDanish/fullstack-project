@@ -1,14 +1,24 @@
 import { useQuery } from "@apollo/client";
-import { SelectHTMLAttributes, forwardRef } from "react";
+import { ChangeEvent, Dispatch, SelectHTMLAttributes, SetStateAction, forwardRef } from "react";
 import { QueryGetLeagues, gqlGetLeagues } from "../../graphql/league";
+import { League } from "../../graphql/types";
 
-export const LeagueSelect = forwardRef<HTMLSelectElement>(function LeagueSelect({required}: SelectHTMLAttributes<HTMLSelectElement>, ref) {
+interface Props {
+  setLeague?: Dispatch<SetStateAction<Partial<Omit<League, 'clubs'>>>>
+}
+
+export const LeagueSelect = forwardRef<HTMLSelectElement, Props>(({required, setLeague}: SelectHTMLAttributes<HTMLSelectElement> & Props, ref) => {
   const { data, loading } = useQuery<QueryGetLeagues>(gqlGetLeagues);
 
   if (loading) return null;
 
   return (
-    <select required={required} ref={ref}>
+    <select required={required} ref={ref} onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+      if (setLeague) {
+        const selected = data?.allLeagues.find((l) => l._id == e.target.value);
+        setLeague(selected!);
+      }
+    }}>
       <option value="">Not selected</option>
       {data?.allLeagues.map(c => {
         return (
