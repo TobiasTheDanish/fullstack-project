@@ -3,6 +3,7 @@ export interface Club {
     name: string,
     league: League,
     shirts: Shirt[],
+    imageUrl: string,
     createdAt?: Date,
 }
 
@@ -11,6 +12,7 @@ export interface League {
     name: string,
     country: string,
     clubs: Club[],
+    imageUrl: string,
     createdAt?: Date,
 }
 

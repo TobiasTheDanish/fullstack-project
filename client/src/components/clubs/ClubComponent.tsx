@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { ClubRenderer, ShirtList } from "..";
+import { RenderClub, ShirtList } from "..";
 import { useQuery } from "@apollo/client";
 import { QueryGetClub, gqlGetClub } from "../../graphql/club";
 
@@ -14,7 +14,7 @@ export function ClubComponent() {
       {loading || !data ? (
         <h1>Loading</h1>
       ) : (
-          <ClubRenderer club={data.clubById} />
+          <RenderClub club={data.clubById} />
         )}
       <hr/>
       <ShirtList type="club" id={id} />

@@ -16,6 +16,7 @@ query getClubsWithLeagues {
     _id
     name
     createdAt
+    imageUrl
     league {
       _id
       country
@@ -35,6 +36,7 @@ query AllClubsByLeague($leagueId: ID) {
     _id
     name
     createdAt
+    imageUrl
   }
 }
 `

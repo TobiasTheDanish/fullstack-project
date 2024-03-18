@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { QueryGetClubsByLeague, gqlGetClubsByLeague } from "../../graphql/club";
-import { ClubRenderer } from "./ClubRenderer";
+import { RenderClubGrid } from ".";
 
 type ClubsByLeagueListProps = {leagueId: string};
 
@@ -22,21 +22,10 @@ export function ClubsByLeagueList({leagueId}: ClubsByLeagueListProps) {
   }
 
 
-  return <Renderer allClubsByLeague={data.allClubsByLeague}/>
-}
-
-type ClubsByLeagueRendererProps = QueryGetClubsByLeague;
-function Renderer({allClubsByLeague: clubs}: ClubsByLeagueRendererProps) {
   return (
-    <>
-      <h1>List of clubs</h1>
-      <div>
-        {clubs.map(club => {
-          return (
-            <ClubRenderer key={club._id} club={club} asLink />
-          );
-        })}
-      </div>
-    </>
-  )
+  <>
+    <h1 className="text-4xl font-bold text-center mt-8">Select a club</h1>
+    <RenderClubGrid clubs={data.allClubsByLeague}/>
+  </>
+    );
 }
