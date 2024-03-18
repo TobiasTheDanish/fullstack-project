@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { CSSProperties } from "react";
 import { QueryGetShirtsByClub, gqlGetShirtsByClub } from "../../graphql/shirt";
+import { RenderShirtGrid } from ".";
 
 interface ShirtListProps {
   clubId: string,
@@ -29,51 +30,7 @@ export const ClubShirtList = (props: ShirtListProps) => {
   return ( 
     <>
       <h1 style={h1Styles}>Shirt List</h1>
-      <Renderer shirtsByClub={data.shirtsByClub}/>
+      <RenderShirtGrid shirts={data.shirtsByClub}/>
     </>
-  );
-}
-
-
-function Renderer({ shirtsByClub: shirts }: QueryGetShirtsByClub) {
-
-  const containerStyles = {
-    fontWeight: '10px',
-  };
-
-  const paragraphStyles = {
-    fontWeight: 'bold',
-  };
-
-  const spanStyles = {
-    fontWeight: 'normal',
-  };
-
-  return (
-    <div style={containerStyles}>
-      {shirts.map((shirt) => (
-        <div key={shirt._id}>
-          <hr />
-          <h3>
-            Player: <span style={spanStyles}>{shirt.playerName}</span>
-          </h3>
-          <p style={paragraphStyles}>
-            Number: <span style={spanStyles}>#{shirt.playerNumber}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Price: <span style={spanStyles}>{shirt.price}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Details: <span style={spanStyles}>{shirt.description}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Condition: <span style={spanStyles}>{shirt.condition}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Seller: <span style={spanStyles}>{shirt.seller?.username}</span>
-          </p>
-        </div>
-      ))}
-    </div>
   );
 }
