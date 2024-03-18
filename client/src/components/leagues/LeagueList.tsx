@@ -19,7 +19,7 @@ export const LeagueList = () => {
 
     return ( 
         <>
-            <h1 className="text-4xl font-bold text-center mt-8">Choose a league</h1>
+            <h1 className="text-4xl font-bold text-center mt-8">Select a league</h1>
             <RenderLeagueGrid leagues={data?.allLeagues} />
         </>
     );
