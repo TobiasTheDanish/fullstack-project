@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { QueryGetClubsByLeague, gqlGetClubsByLeague } from "../../graphql/club";
-import { RenderClubGrid } from "./RenderClubGrid";
+import { RenderClubGrid } from ".";
 
 type ClubsByLeagueListProps = {leagueId: string};
 

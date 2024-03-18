@@ -11,25 +11,22 @@ export const ClubShirtList = (props: ShirtListProps) => {
     variables: {clubId: props.clubId},
   });
 
-  const h1Styles: CSSProperties = {
-    textAlign: "center"
-  }
 
   if(loading) {
     return (
-      <h1 style={h1Styles}>Loading Shirts</h1>
+      <h1 className="text-center">Loading Shirts</h1>
     );
   }
 
   if(!data || !data.shirtsByClub || data.shirtsByClub.length == 0) {
     return (
-      <h1 style={h1Styles}>No Shirts found</h1>
+      <h1 className="text-center">No Shirts found</h1>
     );
   }
 
   return ( 
     <>
-      <h1 style={h1Styles}>Shirt List</h1>
+      <h1 className="text-4xl font-bold text-center mt-8">Shirt List</h1>
       <RenderShirtGrid shirts={data.shirtsByClub}/>
     </>
   );
