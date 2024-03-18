@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import { CSSProperties, useEffect, useState } from "react";
 import { QueryGetShirts, gqlGetShirts } from "../../graphql/shirt";
 import { Shirt } from "../../graphql/types";
+import { RenderShirtGrid } from ".";
 
 export function AllShirtList({ shirts }: {shirts?: Shirt[]}) {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -36,7 +37,7 @@ export function AllShirtList({ shirts }: {shirts?: Shirt[]}) {
           <option value="desc">High to Low</option>
         </select>
       </div>
-      <Renderer allShirts={sortedShirts}/>
+      <RenderShirtGrid shirts={sortedShirts}/>
       </>
     ); 
   }
@@ -48,14 +49,14 @@ export function AllShirtList({ shirts }: {shirts?: Shirt[]}) {
 
   return ( 
     <>
-      <div>
-        <label>Sort by:</label>
+      <div className="m-4">
+        <label>Sort by <b>Buy now</b> Price: </label>
         <select value={sortOrder} onChange={handleSortChange}>
           <option value="asc">Low to High</option>
           <option value="desc">High to Low</option>
         </select>
       </div>
-      <Renderer allShirts={sortedShirts}/>
+      <RenderShirtGrid shirts={sortedShirts}/>
     </>
   );
 }
@@ -66,47 +67,4 @@ function sortShirts(shirts: Shirt[], sortOrder: 'asc' | 'desc') {
     const priceB = parseFloat(b.price.toString()); 
     return sortOrder === 'asc' ? priceA - priceB : priceB - priceA;
   });
-}
-
-function Renderer({ allShirts: shirts }: QueryGetShirts) {
-
-  const containerStyles = {
-    fontWeight: '10px',
-  };
-
-  const paragraphStyles = {
-    fontWeight: 'bold',
-  };
-
-  const spanStyles = {
-    fontWeight: 'normal',
-  };
-
-  return (
-    <div style={containerStyles}>
-      {shirts.map((shirt) => (
-        <div key={shirt._id}>
-          <hr />
-          <h3>
-            Player: <span style={spanStyles}>{shirt.playerName}</span>
-          </h3>
-          <p style={paragraphStyles}>
-            Number: <span style={spanStyles}>#{shirt.playerNumber}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Price: <span style={spanStyles}>{shirt.price}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Details: <span style={spanStyles}>{shirt.description}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Condition: <span style={spanStyles}>{shirt.condition}</span>
-          </p>
-          <p style={paragraphStyles}>
-            Seller: <span style={spanStyles}>{shirt.seller?.username}</span>
-          </p>
-        </div>
-      ))}
-    </div>
-  );
 }
