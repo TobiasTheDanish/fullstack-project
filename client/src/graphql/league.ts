@@ -10,6 +10,7 @@ query getLeagues {
     _id
     name
     country
+    imageUrl
   }
 }
 

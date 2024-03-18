@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client";
 import { QueryGetLeagues, gqlGetLeagues } from "../../graphql/league"; 
-import { Link, useOutlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
+import { RenderLeagueGrid } from "./RenderLeagueGrid";
 
 export const LeagueList = () => {
     const { data, loading } = useQuery<QueryGetLeagues>(gqlGetLeagues);
@@ -18,27 +19,8 @@ export const LeagueList = () => {
 
     return ( 
         <>
-            <h1>League List</h1>
-            <LeagueListRenderer allLeagues={data?.allLeagues!}/>
+            <h1 className="text-4xl font-bold text-center mt-8">Choose a league</h1>
+            <RenderLeagueGrid leagues={data?.allLeagues} />
         </>
     );
-}
-
-
-function LeagueListRenderer({allLeagues: leagues}: QueryGetLeagues) {
-    return (
-        <div>
-            {leagues.map(league => {
-                return (
-                    <Link key={league._id} to={`${league._id}`}>
-                        <div>
-                            <hr />
-                            <h3>League: {league.name}</h3>
-                            <p>Country: {league.country}</p>
-                        </div>
-                    </Link>
-                )
-            })}
-        </div>
-    )
 }
