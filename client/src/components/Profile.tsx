@@ -3,13 +3,10 @@ import { CreateShirtForm } from ".";
 import { QuerySignedInUser, gqlSignedInUser } from "../graphql/user";
 import { useEffect, useState } from "react";
 import { User } from "../graphql/types";
-import { authManager } from "../lib/utils";
-import { useNavigate } from "react-router-dom";
 
 export function Profile() {
   const [user, setUser] = useState<User | null>(null);
   const { data, loading } = useQuery<QuerySignedInUser>(gqlSignedInUser);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
@@ -18,27 +15,33 @@ export function Profile() {
   }, [loading]);
 
   if (loading) {
-    return (
-      <h1>Loading user data</h1>
-    );
+    return <h1>Loading user data</h1>;
   }
-
-  const handleSignOut = () => {
-    authManager.clearJWT();
-    navigate("/sign-in");
-  };
 
   return (
     <>
-      {user && (
+      <div className="flex justify-evenly m-2 p-2">
+        {user && (
+          <div className="border border-gray-800 h-fit p-5 text-left rounded-md">
+            <h1 className="text-4xl font-bold text-center">Info</h1>
+            <hr className="m-4" />
+            <p>
+              <b className="text-left">Username: </b> {user.username}
+            </p>
+            <p>
+              <b>Email: </b> {user.email}
+            </p>
+            <p>
+              <b>Bids placed: </b> {user.placedBids.length}
+            </p>
+            <p>
+              <b>Listings: </b> {user.shirts.length}
+            </p>
+          </div>
+        )}
         <div>
-          <p><b>Username: </b> {user.username}</p>
-          <p><b>Email: </b> {user.email}</p>
-          <button onClick={handleSignOut}>Sign out</button>
+          <CreateShirtForm />
         </div>
-      )}
-      <div>
-      <CreateShirtForm />
       </div>
     </>
   );

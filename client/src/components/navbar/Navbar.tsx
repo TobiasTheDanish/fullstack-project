@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { authManager } from '../../lib/utils';
 import { useEffect, useState } from 'react';
 import { CircleUserRound, Home, Instagram } from 'lucide-react';
@@ -6,6 +6,12 @@ import { CircleUserRound, Home, Instagram } from 'lucide-react';
 export const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    authManager.clearJWT();
+    navigate("/sign-in");
+  };
 
   useEffect(() => {
     setIsLoggedIn(authManager.isLoggedIn());
@@ -37,14 +43,15 @@ export const Navbar = () => {
         <Link to="/profile" className="linkIcon">
           <CircleUserRound color="#ffffff" width="32" height="32" />
         </Link>
+        <button onClick={handleSignOut} className='bg-white rounded-md px-4 py-1'>Sign out</button>
       </div>
       </>
       ) : (
         <div className='flex-1 flex justify-end gap-2'>
-          <NavLink to="/sign-in" className="link bg-white rounded-md px-4 py-1">
+          <NavLink to="/sign-in" className="bg-white rounded-md px-4 py-1">
             Sign In
           </NavLink>
-          <NavLink to="/sign-up" className="link bg-white rounded-md px-4 py-1">
+          <NavLink to="/sign-up" className="bg-white rounded-md px-4 py-1">
             Sign up
           </NavLink>
         </div>

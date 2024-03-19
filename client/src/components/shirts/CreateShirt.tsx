@@ -73,8 +73,9 @@ export function CreateShirtForm() {
     
   return (
     <>
-      <h1>Add a new shirt </h1>
       <form onSubmit={submitHandler} className="max-w-sm md:max-w-md lg:max-w-lg mx-auto border border-gray-800 p-5 rounded-md">
+      <h1 className="text-4xl font-bold text-center">Add a new shirt </h1>
+      <hr className="m-4" />
         {error && <p>{error}</p>}
         <div className="mb-4">
           <label htmlFor="title" className="block">
