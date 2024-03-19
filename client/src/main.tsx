@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ShirtList, LeagueList, ClubList, Navbar, LeagueComponent, ClubComponent, Profile } from './components';
+import { ShirtList, LeagueList, ClubList, Navbar, LeagueComponent, ClubComponent, Profile, ShirtComponent } from './components';
 import App from './App';
 import { authManager } from './lib/utils';
 import { SignInForm } from './components/auth/SignIn';
@@ -29,7 +29,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/clubs" element={<ClubList />} >
               <Route path=':id' element={<ClubComponent />} />
             </Route>
-            <Route path="/all-shirts" element={<ShirtList />} />
+            <Route path="/shirts" element={<ShirtList />}>
+              <Route path=':id' element={<ShirtComponent />} />
+            </Route>
             <Route path="/profile" element={<Profile />} />
             <Route path='/sign-in' element={<SignInForm />} />
           </Route>
