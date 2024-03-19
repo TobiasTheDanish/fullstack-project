@@ -84,11 +84,21 @@ export const shirtsByClub = async (_: never, {clubId}: {clubId: string}) => {
 }
 
 export const shirtById = async (_: never, {shirtId}) => {
-	return Shirt.findById(shirtId);
+	return Shirt.findById(shirtId)
+			.populate('bids')
+			.populate('activeBids')
+			.populate('club')
+			.populate('seller');
+	;
 }
 
 export const shirtsByUserId = async (_: never, {userId}) => {
-	return Shirt.find({"user._id": userId});
+	return Shirt.find({"user._id": userId})
+			.populate('bids')
+			.populate('activeBids')
+			.populate('club')
+			.populate('seller');
+	;
 }
 
 export const shirtsByCondition = async (_: never, {cond}: {cond: string}) => {
