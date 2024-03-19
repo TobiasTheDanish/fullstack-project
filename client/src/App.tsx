@@ -44,7 +44,8 @@ function App() {
           <img src={netherlandsHomeKitImage} alt="Image" className="w-full mx-auto md:mx-0 lg:mx-0" />
         </div>
         <div>
-        <h2 className="text-2xl">Recently Added</h2>
+        <h2 className="text-4xl font-bold text-center mt-4">Recently Added</h2>
+        <hr className="m-4"/>
           <RecentlyAddedShirts shirts={shirts} />
         </div>
       </>
