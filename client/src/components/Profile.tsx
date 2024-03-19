@@ -37,7 +37,9 @@ export function Profile() {
           <button onClick={handleSignOut}>Sign out</button>
         </div>
       )}
+      <div className="border border-gray-800">
       <CreateShirtForm />
+      </div>
     </>
   );
 }
