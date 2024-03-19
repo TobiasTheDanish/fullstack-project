@@ -100,7 +100,7 @@ export const createBid = async (_: any, {input}: CreateBidArgs, context: GraphQL
 		_id: new ObjectId(),
 		owner: new ObjectId(context.userId),
 		shirt: new ObjectId(input.shirtId),
-		expiryDate: new Date(input.expiryDate),
+		expiryDate: new Date(parseInt(input.expiryDate)),
 		amount: input.amount,
 	});
 
