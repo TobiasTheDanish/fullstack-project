@@ -41,10 +41,10 @@ export interface Bid {
     owner?: User,
     shirt?: Shirt,
     amount: number,
-    expiryDate: Date,
+    expiryDate: string,
     accepted: boolean,
     declined: boolean,
-    createdAt?: Date,
+    createdAt?: string,
 }
 
 export interface User {
