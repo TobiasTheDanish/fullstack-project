@@ -25,6 +25,8 @@ export function ImageUpload({setImage}: Props ) {
   }
 
   return (
-      <input type='file' name='file' onChange={submitHandler}/>
+    <label htmlFor="file" className='border border-gray-300 bg-gray-800 text-white inline-block px-16 rounded-md py-2 cursor-pointer'>Add Image
+      <input type='file' id="file" name="file" onChange={submitHandler} className='hidden'/>
+    </label>
   );
 }

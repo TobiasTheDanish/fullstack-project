@@ -74,7 +74,7 @@ export function CreateShirtForm() {
   return (
     <>
       <h1>Add a new shirt </h1>
-      <form onSubmit={submitHandler} className="max-w-sm mx-auto">
+      <form onSubmit={submitHandler} className="max-w-sm md:max-w-md lg:max-w-lg mx-auto border border-gray-800 p-5 rounded-md">
         {error && <p>{error}</p>}
         <div className="mb-4">
           <label htmlFor="title" className="block">
@@ -187,7 +187,7 @@ export function CreateShirtForm() {
         <input
           type="submit"
           value="Create"
-          className="w-full bg-gray-800 text-white py-2 px-4 rounded-md cursor-pointer focus:outline-none"
+          className="w-full bg-gray-800 text-white py-2 px-4 rounded-md cursor-pointer focus:outline-none mt-6 hover:bg-gray-900"
         />
       </form>
     </>
