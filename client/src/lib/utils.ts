@@ -8,8 +8,11 @@ function setJWT(token:string): void {
 
 function getJWT(): string {
 	const token = window.localStorage.getItem("JWT");
-
-	return token ?? "";
+	if(!token){
+		console.log("jwt not found localStorage")
+		return ""
+	}
+	return token;
 }
 
 function isLoggedIn(): boolean {
