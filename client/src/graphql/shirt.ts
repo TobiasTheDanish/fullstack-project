@@ -14,6 +14,7 @@ export const gqlGetShirts = gql`
       description
       condition
       year
+      imageUrls
       club {
         name
       }
@@ -70,6 +71,7 @@ query ShirtsByClub($clubId: ID) {
     condition
     price
     year
+    imageUrls
     seller {
       username
     }
