@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { CSSProperties } from "react";
 import { QueryGetShirtsByClub, gqlGetShirtsByClub } from "../../graphql/shirt";
 import { RenderShirtGrid } from ".";
 

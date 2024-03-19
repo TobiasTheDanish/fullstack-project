@@ -1,4 +1,3 @@
-import './Navbar.css'
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { authManager } from '../../lib/utils';
 import { useEffect, useState } from 'react';
@@ -12,13 +11,13 @@ export const Navbar = () => {
     setIsLoggedIn(authManager.isLoggedIn());
   }, [location.pathname]);
   return (
-<div className='bg-blue-500 p-4 flex justify-between items-center'>
-      <div className='flex items-center'>
+<div className='bg-gray-800 p-4 flex justify-between items-center w-100' >
+      <div className='flex items-center flex-1'>
         <NavLink to="/" className="text-white mr-4">
           <Home width="32" height="32" />
         </NavLink>
       </div>
-      <div className='flex items-center'>
+      <div className='flex items-center flex-2'>
         <NavLink to="/leagues" className="text-white px-4 hover:underline">
           Leagues
         </NavLink>
@@ -26,28 +25,26 @@ export const Navbar = () => {
           Clubs
         </NavLink>
         <NavLink to="/all-shirts" className="text-white px-4 hover:underline">
-          All Shirts
+          Shirts
         </NavLink>
       </div>
       {isLoggedIn ? (
       <>
-        <div className='iconContainer'>
+        <div className='iconContainer gap-3 mr-4 flex-1'>
+        <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
+          <Instagram color="#ffffff" width="32" height="32" />
+        </Link>
         <Link to="/profile" className="linkIcon">
           <CircleUserRound color="#ffffff" width="32" height="32" />
         </Link>
       </div>
-      <div className='iconContainer'>
-        <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
-          <Instagram color="#ffffff" width="32" height="32" />
-        </Link>
-      </div>
       </>
       ) : (
-        <div className='signInContainer'>
-          <NavLink to="/sign-in" className="link">
+        <div className='flex-1 flex justify-end gap-2'>
+          <NavLink to="/sign-in" className="link bg-white rounded-md px-4 py-1">
             Sign In
           </NavLink>
-          <NavLink to="/sign-up" className="link">
+          <NavLink to="/sign-up" className="link bg-white rounded-md px-4 py-1">
             Sign up
           </NavLink>
         </div>

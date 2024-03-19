@@ -32,8 +32,8 @@ export function Profile() {
     <>
       {user && (
         <div>
-          <p><b>Username:</b> {user.username}</p>
-          <p><b>Email:</b> {user.email}</p>
+          <p><b>Username: </b> {user.username}</p>
+          <p><b>Email: </b> {user.email}</p>
           <button onClick={handleSignOut}>Sign out</button>
         </div>
       )}
