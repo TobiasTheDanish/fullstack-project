@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { CreatShirtInput, gqlCreateShirtMutation } from "../../graphql/shirt";
 
 export function CreateShirtForm() {
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
   const [createShirtMutation] = useMutation(gqlCreateShirtMutation);
   const [latestImg, setLatestImg] = useState<string>("");
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
@@ -31,7 +31,6 @@ export function CreateShirtForm() {
     e.preventDefault();
 
     try {
-
       const shirt: CreatShirtInput = {
         title: titleRef.current?.value!,
         description: descRef.current?.value!,
@@ -44,38 +43,39 @@ export function CreateShirtForm() {
         playerName: playerNameRef.current?.value,
         playerNumber: parseInt(playerNumberRef.current?.value!),
       };
-      
+
       await createShirtMutation({
         variables: {
           input: shirt,
         },
       });
 
-
       //Cleaning up refs & states after submitting
-      titleRef.current!.value = '';
-      descRef.current!.value = '';
-      priceRef.current!.value = '';
-      minPriceRef.current!.value = '';
-      yearRef.current!.value = '';
-      clubRef.current!.value = '';
-      conditionRef.current!.value = '';
-      playerNameRef.current!.value = '';
-      playerNumberRef.current!.value = '';
+      titleRef.current!.value = "";
+      descRef.current!.value = "";
+      priceRef.current!.value = "";
+      minPriceRef.current!.value = "";
+      yearRef.current!.value = "";
+      clubRef.current!.value = "";
+      //conditionRef.current!.value = "";
+      playerNameRef.current!.value = "";
+      playerNumberRef.current!.value = "";
       setLatestImg("");
       setUploadedImages([]);
-
     } catch (error) {
-      console.log("catched error")
-      setError("Invalid Price")
+      console.log("catched error");
+      setError("Invalid Price");
     }
-    };
-    
+  };
+
   return (
     <>
-      <form onSubmit={submitHandler} className="max-w-sm md:max-w-md lg:max-w-lg mx-auto border border-gray-800 p-5 rounded-md">
-      <h1 className="text-4xl font-bold text-center">Add a new shirt </h1>
-      <hr className="m-4" />
+      <form
+        onSubmit={submitHandler}
+        className="max-w-sm md:max-w-md lg:max-w-lg mx-auto border border-gray-800 p-5 rounded-md"
+      >
+        <h1 className="text-4xl font-bold text-center">Add a new shirt </h1>
+        <hr className="m-4" />
         {error && <p>{error}</p>}
         <div className="mb-4">
           <label htmlFor="title" className="block">
@@ -105,9 +105,7 @@ export function CreateShirtForm() {
           <label htmlFor="club" className="block">
             Club
           </label>
-          <ClubSelect
-            ref={clubRef}
-           />
+          <ClubSelect ref={clubRef} />
         </div>
         <div className="mb-4">
           <label htmlFor="price" className="block">
@@ -149,13 +147,21 @@ export function CreateShirtForm() {
           <label htmlFor="condition" className="block">
             Condition
           </label>
-          <input
-            type="text"
-            name="condition"
-            ref={conditionRef}
-            required
-            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-gray-800"
-          />
+          <hr />
+            <div className="flex justify-evenly">
+              <div className="flex flex-col">
+                <label htmlFor="new">New</label>
+                <input ref={conditionRef} type="radio" id="new" name="condition" value="New" />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="used">Used</label>
+                <input ref={conditionRef} type="radio" id="used" name="condition" value="Used" />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="damaged">Damaged</label>
+                <input ref={conditionRef} type="radio" id="damaged" name="condition" value="Damaged" />
+              </div>
+          </div>
         </div>
         <div className="mb-4">
           <label htmlFor="player-name" className="block">
