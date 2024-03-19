@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
-import { Shirt } from "./types";
+import { Shirt, User } from "./types";
+import { gqlBid } from "./bid";
 
 export type QueryGetShirts = {
   allShirts: Shirt[];
@@ -28,6 +29,41 @@ export const gqlGetShirts = gql`
     }
   }
 `;
+
+export type QueryGetShirtById = {
+  shirtById: Shirt,
+}
+
+export const gqlGetShirtById = gql`#graphql
+query ShirtById($shirtId: ID) {
+  shirtById(shirtId: $shirtId) {
+    title
+    description
+    imageUrls
+    price
+    minPrice
+    playerName
+    playerNumber
+    seller {
+      username
+      _id
+    }
+    club {
+      _id
+      name
+    }
+    condition
+    year
+    activeBids {
+      _id
+      accepted
+      declined
+      amount
+      expiryDate
+    }
+  }
+}
+`
 
 export type QueryGetShirtsByLeague = {
   shirtsByLeague: Shirt[];
