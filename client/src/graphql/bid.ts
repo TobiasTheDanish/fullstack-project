@@ -24,3 +24,17 @@ query BidsByShirtId($shirtId: ID) {
   }
 }
 `
+
+export type MutationCreateBidInput = {
+  shirtId: string,
+  amount: number,
+  expiryDate: string,
+}
+
+export const gqlCreateBid = gql`#graphql
+mutation CreateBid($input: CreateBidInput) {
+  createBid(input: $input) {
+    _id
+  }
+}
+`

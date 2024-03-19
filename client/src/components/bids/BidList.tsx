@@ -9,8 +9,12 @@ interface Props {
   maxBids?: number,
 }
 
-export function BidList({shirtId, bids: startBids}: Props) {
-  const [bids, setBids] = useState<gqlBid[]>(startBids ?? []);
+function bidSort(a: gqlBid, b: gqlBid): number {
+  return b.amount - a.amount;
+}
+
+export function BidList({shirtId, bids: startBids, maxBids}: Props) {
+  const [bids, setBids] = useState<gqlBid[]>(startBids ? [...startBids].sort(bidSort).slice(0, maxBids) : []);
   const {data, loading} = useQuery<QueryGetBidsByShirt>(gqlGetBidsByShirtId, {
     variables: {
       shirtId: shirtId,
@@ -18,10 +22,20 @@ export function BidList({shirtId, bids: startBids}: Props) {
   });
 
   useEffect(() => {
-    if (!shirtId || loading) return;
+    if (shirtId) {
+      if (loading) return;
 
-    if (data) {
-      setBids(data.bidsByShirtId);
+      if (data) {
+        let bidsToSet = data.bidsByShirtId.filter(b => !b.declined && Date.now() < new Date(parseInt(b.expiryDate)).getMilliseconds());
+
+        bidsToSet = [...bidsToSet].sort(bidSort);
+
+        if (maxBids && bidsToSet.length > maxBids) {
+          bidsToSet = bidsToSet.slice(0, maxBids);
+        }
+
+        setBids(bidsToSet);
+      }
     }
   }, [loading, data]);
 
@@ -29,6 +43,15 @@ export function BidList({shirtId, bids: startBids}: Props) {
     return (
       <p>Loading bids</p>
     );
+  }
+
+  if (bids.length == 0) {
+    return (
+      <div className="flex flex-col self-center mx-auto">
+        <h2>Currently no bids</h2>
+        <p>Make your bid now!</p>
+      </div>
+    )
   }
 
   return (

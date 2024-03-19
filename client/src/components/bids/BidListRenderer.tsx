@@ -10,9 +10,9 @@ export function BidRenderer({bid: b}: Props) {
   }
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md p-6 mb-4">
-        {b.amount && <h3>Amount: {b.amount}</h3>}
-        {b.expiryDate && <p>Expires: {new Date(parseInt(b.expiryDate!)).toLocaleString()}</p>}
+      <div className="bg-white border text-start rounded-lg py-2 px-4">
+        {b.amount && <h3><b>Amount:</b> ${b.amount}</h3>}
+        {b.expiryDate && <p><b>Expires:</b> {new Date(parseInt(b.expiryDate!)).toLocaleDateString()}</p>}
       </div>
     </>
   );
