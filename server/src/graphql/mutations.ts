@@ -77,13 +77,31 @@ export const deleteShirtById = async (_: any, {id}: {id: string}, context: Graph
 	return shirt;
 }
 
-export const acceptBid = async (_: any, {bidId}: {bidId: string}, context: GraphQLContext) => {
-	await Bid.updateOne({_id: bidId, owner: context.userId}, {accepted: true});
+export const acceptBid = async (_: any, {bidId}: {bidId: string}) => {
+	const bid = await Bid.updateOne({_id: bidId}, {accepted: true});
+
+	if (bid.modifiedCount != 1) {
+		throw new GraphQLError(`No update to place on bid with id: ${bidId}!`, {
+			extensions: {
+				code: "INTERNAL_SERVER_ERROR",
+			},
+		});
+	}
+
 	return await Bid.findById(bidId);
 }
 
-export const declineBid = async (_: any, {bidId}: {bidId: string}, context: GraphQLContext) => {
-	await Bid.updateOne({_id: bidId, owner: context.userId}, {declined: true});
+export const declineBid = async (_: any, {bidId}: {bidId: string}) => {
+	const bid = await Bid.updateOne({_id: bidId}, {declined: true});
+
+	if (bid.modifiedCount != 1) {
+		throw new GraphQLError(`No update to place on bid with id: ${bidId}!`, {
+			extensions: {
+				code: "INTERNAL_SERVER_ERROR",
+			},
+		});
+	}
+
 	return await Bid.findById(bidId);
 }
 
