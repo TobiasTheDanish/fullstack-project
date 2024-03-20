@@ -29,7 +29,6 @@ export function SignInForm() {
 
     if (data) {
       authManager.setJWT(data.userSignIn);
-
       navigate('/profile');
     }
 
@@ -40,16 +39,39 @@ export function SignInForm() {
 
   return (
     <>
+    <div className="p-5 m-2">
+
       { errorMsg && <p>{errorMsg}</p> }
-      <form onSubmit={handleLogin}>
-        <label>Username</label>
-        <input ref={usernameRef} name="username" />
-        <br/>
-        <label>Password</label>
-        <input ref={passwordRef} type="password" name="password" />
-        <br/>
-        <input type="submit" value={"Login"} disabled={loading} />
-      </form>
+      <form onSubmit={handleLogin} className="max-w-sm mx-auto">
+    <div className="mb-4">
+        <label htmlFor="username" className="block">Username</label>
+        <input
+            ref={usernameRef}
+            type="text"
+            id="username"
+            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-gray-800"
+            />
+    </div>
+    <div className="mb-4">
+        <label htmlFor="password" className="block">Password</label>
+        <input
+            ref={passwordRef}
+            type="password"
+            id="password"
+            className="w-full border rounded-md px-3 py-2 focus:outline-none focus:border-gray-800"
+            />
+    </div>
+    <div>
+        <input
+            type="submit"
+            value="Sign In"
+            disabled={loading}
+            className="w-full bg-gray-800 text-white py-2 px-4 rounded-md cursor-pointer focus:outline-none"
+            />
+    </div>
+</form>
+            </div>
+
     </>
   );
 }

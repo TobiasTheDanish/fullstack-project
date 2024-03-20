@@ -7,6 +7,7 @@ import { ShirtList, LeagueList, ClubList, Navbar, LeagueComponent, ClubComponent
 import App from './App';
 import { authManager } from './lib/utils';
 import { SignInForm } from './components/auth/SignIn';
+import { SignUpForm } from './components/auth/SignUp';
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
@@ -34,6 +35,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </Route>
             <Route path="/profile" element={<Profile />} />
             <Route path='/sign-in' element={<SignInForm />} />
+            <Route path='/sign-up' element={<SignUpForm /> } />
           </Route>
         </Routes>
       </BrowserRouter>

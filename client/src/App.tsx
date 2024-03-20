@@ -36,7 +36,7 @@ function App() {
               Find your unique football shirts
             </h2>
             <Link to="/shirts">
-              <button className="bg-blue-600 text-white font-bold py-2 px-20 rounded transition duration-300 hover:bg-blue-700 ">
+              <button className="bg-gray-800 text-white font-bold py-2 px-20 rounded transition duration-300 hover:bg-blue-700 ">
                 Discover
               </button>
             </Link>
@@ -44,7 +44,8 @@ function App() {
           <img src={netherlandsHomeKitImage} alt="Image" className="w-full mx-auto md:mx-0 lg:mx-0" />
         </div>
         <div>
-        <h2 className="text-2xl">Recently Added</h2>
+        <h2 className="text-4xl font-bold text-center mt-4">Recently Added</h2>
+        <hr className="m-4"/>
           <RecentlyAddedShirts shirts={shirts} />
         </div>
       </>
