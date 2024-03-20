@@ -23,7 +23,7 @@ function App() {
         return parseInt(b.createdAt!) - parseInt(a.createdAt!);
       }
     );
-    const recentlyAddedShirts: Shirt[] = sortShirts.slice(0, 4) || [];
+    const recentlyAddedShirts: Shirt[] = sortShirts.slice(0, 3) || [];
     setShirts(recentlyAddedShirts);
   }, [data]);
 
@@ -33,7 +33,7 @@ function App() {
         <div className="relative">
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <h2 className="text-stroke text-white text-2xl font-bold mb-2">
-              Find your unique football shirts
+              Find your unique football shirt
             </h2>
             <Link to="/shirts">
               <button className="bg-gray-800 text-white font-bold py-2 px-20 rounded transition duration-300 hover:bg-blue-700 ">
