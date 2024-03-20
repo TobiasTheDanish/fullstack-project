@@ -27,11 +27,10 @@ export function ShirtComponent() {
         variables: {
           bidId: bidId,
         }
-      })
+      });
 
       location.reload();
     } catch(err) {
-      console.error(err);
       setErrorMsg("An error occurred when accepting bid. " + err);
     }
   }
@@ -46,7 +45,6 @@ export function ShirtComponent() {
 
       location.reload();
     } catch (err) {
-      console.error(err);
       setErrorMsg("An error occurred when declining bid. " + err);
     }
   }
@@ -55,7 +53,7 @@ export function ShirtComponent() {
     return b.amount - a.amount;
   };
 
-  if (loading && !userData) {
+  if (loading || !userData || !data) {
     return (
       <h1>Loading shirt</h1>
     );
@@ -79,7 +77,7 @@ export function ShirtComponent() {
           <>
             <div className="flex flex-col gap-2">
               <h3 className="font-bold text-xl text-start">Highest bids</h3>
-              <div className="flex">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <BidList bids={data.shirtById.activeBids!} maxBids={3}/>
               </div>
             </div>
