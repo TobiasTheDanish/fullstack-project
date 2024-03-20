@@ -8,7 +8,7 @@ interface RecentlyAddedShirtsProps {
 
 const RecentlyAddedShirts: React.FC<RecentlyAddedShirtsProps> = ({ shirts }) => {
 
-  const recentlyAddedShirts = shirts.slice(0, 4);
+  const recentlyAddedShirts = shirts.slice(0, 3);
 
   return (
     <RenderShirtGrid shirts={recentlyAddedShirts}/>

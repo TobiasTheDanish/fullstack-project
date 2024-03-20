@@ -1,8 +1,16 @@
+import { Link } from "react-router-dom";
 import { Shirt } from "../../graphql/types";
 
-type shirtProps = { shirt: Partial<Shirt> };
+type shirtProps = { shirt: Partial<Shirt>, asLink?: boolean };
 
-export const RenderShirt = ({ shirt }: shirtProps) => {
+export const RenderShirt = ({ shirt, asLink }: shirtProps) => {
+  if(asLink){
+    return(
+      <Link to={`/shirts/${shirt._id}`}>
+      <RenderShirt shirt={shirt}/>
+      </Link> 
+         )
+  }
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-4 flex flex-col justify-center">
       {shirt.imageUrls && <img src={shirt.imageUrls[0]} className="w-1/3 md:w-1/2 lg:w-2/3 mx-auto"/>}
