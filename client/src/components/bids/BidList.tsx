@@ -56,7 +56,7 @@ export function BidList({shirtId, bids: startBids, maxBids}: Props) {
 
   return (
     <>
-      {bids.map(b => <BidRenderer key={b._id} bid={b} />)}
+      {bids.map(b => <BidRenderer className="border rounded-lg" key={b._id} bid={b} />)}
     </>
   );
 }
