@@ -1,18 +1,20 @@
 import { gqlBid } from "../../graphql/bid";
+import { cn } from "../../lib/utils";
 
-interface Props {
+interface Props extends React.ComponentProps<'div'> {
   bid: Partial<gqlBid>
 }
 
-export function BidRenderer({bid: b}: Props) {
+export function BidRenderer({bid: b, className, children}: Props) {
   if (!b) {
     return null;
   }
   return (
     <>
-      <div className="bg-white border text-start rounded-lg py-2 px-4">
+      <div className={cn("bg-white text-start py-2 px-4", className)}>
         {b.amount && <h3><b>Amount:</b> ${b.amount}</h3>}
         {b.expiryDate && <p><b>Expires:</b> {new Date(parseInt(b.expiryDate!)).toLocaleDateString()}</p>}
+        {children}
       </div>
     </>
   );
