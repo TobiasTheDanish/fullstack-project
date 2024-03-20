@@ -53,9 +53,7 @@ function App() {
   }
   return (
     <>
-      <div id="root">
-        <Outlet />
-      </div>
+      <Outlet />
     </>
   );
 }
