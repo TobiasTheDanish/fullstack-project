@@ -3,7 +3,8 @@
   text-align: center;
   height: 100vh;
   width: 100vw;
-  position: relative; 
+  position: relative;
+  overflow-x: hidden; 
 }
 
 .text-stroke {
