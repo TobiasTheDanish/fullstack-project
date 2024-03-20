@@ -37,7 +37,7 @@ export const Navbar = () => {
       {isLoggedIn ? (
       <>
         <div className='iconContainer flex justify-end gap-3 mr-4 flex-1'>
-        <Link to="https://www.instagram.com/stennickes_collection/" className="linkIcon">
+        <Link to="https://www.instagram.com/stennickes_collection/" target='_blank' className="linkIcon">
           <Instagram color="#ffffff" width="32" height="32" />
         </Link>
         <Link to="/profile" className="linkIcon">
