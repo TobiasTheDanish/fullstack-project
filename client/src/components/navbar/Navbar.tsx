@@ -30,7 +30,7 @@ export const Navbar = () => {
         <NavLink to="/clubs" className="text-white px-4 hover:underline">
           Clubs
         </NavLink>
-        <NavLink to="/all-shirts" className="text-white px-4 hover:underline">
+        <NavLink to="/shirts" className="text-white px-4 hover:underline">
           Shirts
         </NavLink>
       </div>

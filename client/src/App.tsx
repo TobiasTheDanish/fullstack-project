@@ -35,7 +35,7 @@ function App() {
             <h2 className="text-stroke text-white text-2xl font-bold mb-2">
               Find your unique football shirts
             </h2>
-            <Link to="/all-shirts">
+            <Link to="/shirts">
               <button className="bg-gray-800 text-white font-bold py-2 px-20 rounded transition duration-300 hover:bg-blue-700 ">
                 Discover
               </button>

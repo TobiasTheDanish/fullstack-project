@@ -1,3 +1,6 @@
+import clsx, { type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 function clearJWT(): void {
 	window.localStorage.removeItem("JWT");
 }
@@ -27,3 +30,7 @@ export const authManager = (() => {
 		isLoggedIn,
 	}
 })();
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
