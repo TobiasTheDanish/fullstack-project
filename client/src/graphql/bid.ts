@@ -25,15 +25,25 @@ query BidsByShirtId($shirtId: ID) {
 }
 `
 
-export type MutationCreateBidInput = {
-  shirtId: string,
-  amount: number,
-  expiryDate: string,
-}
-
 export const gqlCreateBid = gql`#graphql
 mutation CreateBid($input: CreateBidInput) {
   createBid(input: $input) {
+    _id
+  }
+}
+`
+
+export const gqlAcceptBid = gql`#graphql
+mutation AcceptBid($bidId: ID!) {
+  acceptBid(bidId: $bidId) {
+    _id
+  }
+}
+`
+
+export const gqlDeclineBid = gql`#graphql
+mutation DeclineBid($bidId: ID!) {
+  declineBid(bidId: $bidId) {
     _id
   }
 }
