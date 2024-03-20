@@ -5,6 +5,7 @@ import { ILeague } from './league';
 export interface IClub extends Document {
     _id: string,
     name: string,
+    imageUrl: string,
     league: ILeague,
     shirts: IShirt[],
     createdAt?: Date,
@@ -17,6 +18,10 @@ const schema = new mongoose.Schema<IClub>({
         minlength: [1, "Club name cannot be empty."],
         trim: true,
         unique: true,
+    },
+    imageUrl: {
+        type: String,
+        required: [true, "A League must have an image"],
     },
     league: {type: Schema.Types.ObjectId, ref: 'League'},
     createdAt: {

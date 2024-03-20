@@ -3,6 +3,7 @@ export interface Club {
     name: string,
     league: League,
     shirts: Shirt[],
+    imageUrl: string,
     createdAt?: Date,
 }
 
@@ -11,6 +12,7 @@ export interface League {
     name: string,
     country: string,
     clubs: Club[],
+    imageUrl: string,
     createdAt?: Date,
 }
 
@@ -30,6 +32,7 @@ export interface Shirt {
     activeBids: Bid[],
     price: number,
     minPrice: number,
+    imageUrls: string[],
     createdAt?: string,
 }
 
@@ -38,10 +41,10 @@ export interface Bid {
     owner?: User,
     shirt?: Shirt,
     amount: number,
-    expiryDate: Date,
+    expiryDate: string,
     accepted: boolean,
     declined: boolean,
-    createdAt?: Date,
+    createdAt?: string,
 }
 
 export interface User {

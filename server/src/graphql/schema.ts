@@ -2,16 +2,30 @@ import queries from "./queries";
 import mutations from "./mutations";
 
 export const typeDefs = `#graphql
+	input UpdateLeagueInput {
+		name: String,
+		country: String,
+		imageUrl: String
+	}
+
 	type League {
 		_id: ID!,
 		name: String!,
+		imageUrl: String!,
 		country: String!,
 		createdAt: String,
+	}
+
+	input UpdateClubInput {
+		name: String,
+		league: String,
+		imageUrl: String
 	}
 
 	type Club {
 		_id: ID!,
 		name: String!,
+		imageUrl: String!,
 		league: League!,
 		shirts: [Shirt],
 		createdAt: String,
@@ -67,8 +81,8 @@ export const typeDefs = `#graphql
 		username: String!,
 		email: String!,
 		password: String!,
-		shirts: Shirt,
-		placedBids: Bid,
+		shirts: [Shirt],
+		placedBids: [Bid],
 		createdAt: String,
 	}
 
@@ -112,7 +126,7 @@ export const typeDefs = `#graphql
 		shirtsByYear(year: String): [Shirt],
 		bidsByShirtId(shirtId: ID): [Bid],
 		bidsByUserId(userId: ID): [Bid],
-		userSignIn(username: String!, password: String!): String,
+		signedInUser: User,
 	}
 
 	type Mutation {
@@ -124,6 +138,9 @@ export const typeDefs = `#graphql
 		createBid(input: CreateBidInput): Bid,
 		updateBid(bidId: ID!, input: UpdateBidInput): Bid,
 		deleteBidById(bidId: ID!): Bid,
+		updateLeague(leagueId: ID!, input: UpdateLeagueInput): League,
+		updateClub(clubId: ID!, input: UpdateClubInput): Club,
+		userSignIn(username: String!, password: String!): String,
 		userSignUp(username: String!, email: String!, password: String!): String,
 	}
 `;

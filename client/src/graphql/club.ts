@@ -16,6 +16,7 @@ query getClubsWithLeagues {
     _id
     name
     createdAt
+    imageUrl
     league {
       _id
       country
@@ -35,6 +36,7 @@ query AllClubsByLeague($leagueId: ID) {
     _id
     name
     createdAt
+    imageUrl
   }
 }
 `
@@ -58,3 +60,16 @@ query ClubById($clubId: ID) {
   }
 }
 `
+
+export const gqlUpdateClub = gql`#graphql
+mutation UpdateClub($clubId: ID!, $input: UpdateClubInput) {
+  updateClub(clubId: $clubId, input: $input) {
+    _id
+    name
+    league {
+      name
+    }
+    imageUrl
+  }
+}
+`;

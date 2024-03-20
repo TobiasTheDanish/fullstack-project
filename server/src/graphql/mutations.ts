@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import { GraphQLError } from "graphql";
 import { User } from "../model/user";
 import { authenticate, GraphQLContext } from "./utils";
+import { League } from "../model/league";
+import { Club } from "../model/club";
 
 interface CreateShirtArgs {
 	input: {
@@ -98,7 +100,7 @@ export const createBid = async (_: any, {input}: CreateBidArgs, context: GraphQL
 		_id: new ObjectId(),
 		owner: new ObjectId(context.userId),
 		shirt: new ObjectId(input.shirtId),
-		expiryDate: new Date(input.expiryDate),
+		expiryDate: new Date(parseInt(input.expiryDate)),
 		amount: input.amount,
 	});
 
@@ -128,6 +130,52 @@ export const updateBid = async (_: any, {bidId, input}: UpdateBidArgs, context: 
 
 export const deleteBidById = async (_: any, {bidId}: {bidId: string}, context: GraphQLContext) => {
 	return Bid.findOneAndDelete({_id: bidId, owner: context.userId});
+}
+
+interface UpdateLeagueArgs {
+	leagueId: string, 
+	input: {
+		name: string,
+		country: string,
+		imageUrl: string,
+	}
+}
+
+export const updateLeague = async (_: any, {leagueId, input}: UpdateLeagueArgs) => {
+	await League.updateOne({_id: leagueId}, {...input})
+
+	return await League.findById(leagueId)
+		.populate({
+			path: 'clubs',
+			populate: {
+				path: 'shirts',
+				populate: {
+					path: "bids activeBids seller club"
+				}
+			}
+		});
+}
+
+interface UpdateClubArgs {
+	clubId: string, 
+	input: {
+		name: string,
+		league: string,
+		imageUrl: string,
+	}
+}
+
+export const updateClub = async (_: any, {clubId, input}: UpdateClubArgs) => {
+	await Club.updateOne({_id: clubId}, {...input})
+
+	return await Club.findById(clubId)
+		.populate('league')
+		.populate({
+			path: 'shirts',
+			populate: {
+				path: "bids activeBids seller club"
+			}
+		});
 }
 
 interface Credentials {
@@ -160,6 +208,45 @@ export const userSignUp = async(_: never, {username, email, password}: Credentia
 	}
 }
 
+interface Credentials {
+	username: string,
+	password: string,
+}
+export const userSignIn = async(_: never, {username, password}: Credentials, context: GraphQLContext) => {
+	const user = await User.findOne({username: username});
+
+	if (!user) {
+		throw new GraphQLError("Invalid username", {
+			extensions: {
+				code: 'BAD_CREDENTIALS',
+			},
+		});
+	}
+
+	const match = await bcrypt.compare(password, user.password);
+
+	if (!match) {
+		throw new GraphQLError("Invalid username or password", {
+			extensions: {
+				code: 'BAD_CREDENTIALS',
+			},
+		});
+	}
+
+	try {
+		const token = jwt.sign({userId: user._id}, context.jwtSecret, {expiresIn: '1d'});
+
+		return token
+	} catch (e) {
+		throw new GraphQLError("Could not sign JWT.", {
+			extensions: {
+				code: 'INTERNAL_SERVER_ERROR',
+			},
+			originalError: e,
+		});
+	}
+}
+
 export default {
 	createShirt: authenticate(createShirt),
 	updateShirt: authenticate(updateShirt),
@@ -169,5 +256,8 @@ export default {
 	createBid: authenticate(createBid),
 	updateBid: authenticate(updateBid),
 	deleteBidById: authenticate(deleteBidById),
+	updateLeague: authenticate(updateLeague),
+	updateClub: authenticate(updateClub),
+	userSignIn,
 	userSignUp,
 }
